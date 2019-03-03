@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-uploader',
@@ -10,6 +10,8 @@ export class UploaderComponent {
 
   files: File[] = [];
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   toggleHover(event: boolean) {
     this.isHovering = event;
   }
@@ -18,5 +20,6 @@ export class UploaderComponent {
     for (let i = 0; i < files.length; i++) {
       this.files.push(files.item(i));
     }
+    this.cd.markForCheck();
   }
 }

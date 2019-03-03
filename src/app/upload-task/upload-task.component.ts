@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { finalize, tap } from 'rxjs/operators';
+import { finalize, tap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upload-task',
@@ -19,7 +19,7 @@ export class UploadTaskComponent implements OnInit {
 
   percentage: Observable<number>;
   snapshot: Observable<any>;
-  downloadURL: string;
+  downloadURL: Promise<string>;
 
   constructor(
     private storage: AngularFireStorage,
@@ -47,11 +47,12 @@ export class UploadTaskComponent implements OnInit {
       tap(console.log),
       // The file's download URL
       finalize(async () => {
-        this.downloadURL = await ref.getDownloadURL().toPromise();
+        this.downloadURL = ref.getDownloadURL().toPromise();
+        // console.log(this.downloadURL);
 
         this.db
           .collection('files')
-          .add({ downloadURL: this.downloadURL, path });
+          .add({ downloadURL: await this.downloadURL, path });
       })
     );
   }
