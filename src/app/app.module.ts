@@ -13,16 +13,20 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { SafePipe } from './safe.pipe';
+import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+
 import { MatButtonModule } from '@angular/material/button';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent,
     DropzoneDirective,
     UploaderComponent,
-    UploadTaskComponent
+    UploadTaskComponent,
+    SafePipe,
+    ProgressBarComponent
   ],
   imports: [
     BrowserModule,
@@ -33,8 +37,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     AngularFireStorageModule,
     BrowserAnimationsModule, // imports firebase/storage only needed for storage features
     MatButtonModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]

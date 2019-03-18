@@ -1,0 +1,5 @@
+<div class="progress">
+  <div class="progress-bar" [style.width.%]="value" [class.low]="value < 25" [class.medium]="value >= 25 && value < 75"
+    [class.high]="value >= 75"></div>
+  <span class="value">{{ value }}%</span>
+</div>
