@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { finalize, tap, filter } from 'rxjs/operators';
 
 @Component({
@@ -15,19 +15,35 @@ import { finalize, tap, filter } from 'rxjs/operators';
 export class UploadTaskComponent implements OnInit {
   @Input() file: File;
 
+  isImage: boolean;
+  localUrl: string | ArrayBuffer;
+
   task: AngularFireUploadTask;
 
-  percentage: Observable<number>;
+  // percentage: Observable<number>;
+  percent: number = 0;
   snapshot: Observable<any>;
   downloadURL: Promise<string>;
 
+  hover: boolean;
+
   constructor(
     private storage: AngularFireStorage,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private ref: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.startUpload();
+    this.readLocalUrl();
+    this.isImage = this.file.type.includes('image');
+  }
+
+  readLocalUrl() {
+    const reader = new FileReader();
+
+    reader.onload = () => (this.localUrl = reader.result);
+    reader.readAsDataURL(this.file);
   }
 
   startUpload() {
@@ -41,10 +57,16 @@ export class UploadTaskComponent implements OnInit {
     this.task = this.storage.upload(path, this.file);
 
     // Progress monitoring
-    this.percentage = this.task.percentageChanges();
+    // this.percentage = this.task.percentageChanges();
 
     this.snapshot = this.task.snapshotChanges().pipe(
       tap(console.log),
+      tap(task => {
+        this.percent = Math.round(
+          (task.bytesTransferred / task.totalBytes) * 100
+        );
+        this.ref.detectChanges();
+      }),
       // The file's download URL
       finalize(async () => {
         this.downloadURL = ref.getDownloadURL().toPromise();

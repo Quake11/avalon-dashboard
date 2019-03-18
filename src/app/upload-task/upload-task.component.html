@@ -1,24 +1,17 @@
-<div class="wrapper">
-  <div *ngIf="percentage | async as pct">
-    <mat-progress-bar mode="determinate" [value]="pct"></mat-progress-bar>
-    {{ pct | number }}%
-  </div>
+<div class="wrapper" (mouseover)="hover=true" (mouseleave)="hover=false">
+  <img *ngIf="isImage && localUrl" [src]="localUrl | safe: 'url'" [class.loading]="percent < 100">
+  <img *ngIf="!isImage" src="assets/file.svg" style="object-fit: contain;" [class.loading]="percent < 100">
 
-
-
-  <div *ngIf="(snapshot | async) as snap">
-    <div *ngIf="downloadURL | async as url; else placeholder">
-      <h3>Results!</h3>
-      <img [src]="url"><br>
-      <a [href]="url" target="_blank" rel="noopener">Download Me!</a>
+  <div class="overlay" [hidden]="!hover">
+    <div class="controls" *ngIf="(snapshot | async) as snap">
+      <a mat-icon-button *ngIf="downloadURL | async as url" [href]="url" target="_blank" rel="noopener">
+        <mat-icon style="color: white">zoom_in</mat-icon>
+      </a>
+      <button mat-icon-button>
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
     </div>
-
-    <ng-template #placeholder>
-      <mat-spinner></mat-spinner>
-    </ng-template>
-
-    <button mat-flat-button color="accent" (click)="task.pause()" [disabled]="!isActive(snap)">Пауза</button>
-    <button mat-flat-button color="warn" (click)="task.cancel()" [disabled]="!isActive(snap)">Отмена</button>
-    <button mat-flat-button color="primary" (click)="task.resume()" [disabled]="!(snap?.state === 'paused')">Продолжить</button>
   </div>
 </div>
+<p class="file-name">{{ file.name }}</p>
+<app-progress-bar *ngIf="percent" [value]="percent"></app-progress-bar>

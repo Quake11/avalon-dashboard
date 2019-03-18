@@ -1,16 +1,67 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
+import {
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+  query,
+  stagger
+} from '@angular/animations';
 
 @Component({
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
-  styleUrls: ['./uploader.component.scss']
+  styleUrls: ['./uploader.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(-25px)' }),
+        animate(
+          '200ms ease-in-out',
+          style({ opacity: 1, transform: 'translateY(0)' })
+        )
+      ]),
+      transition(':leave', [
+        style({ opacity: 1 }),
+        animate('200ms ease-in-out', style({ opacity: 0 }))
+      ])
+    ]),
+
+    trigger('listAnimation', [
+      transition('* => *', [
+        query(
+          ':leave',
+          [
+            stagger(100, [
+              animate(
+                '0.5s',
+                style({ transform: 'translateY(-25px)', opacity: 0 })
+              )
+            ])
+          ],
+          { optional: true }
+        ),
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'translateY(-25px)' }),
+            stagger(100, [
+              animate('0.2s', style({ opacity: 1, transform: 'translateY(0)' }))
+            ])
+          ],
+          { optional: true }
+        )
+      ])
+    ])
+  ]
 })
 export class UploaderComponent {
   isHovering: boolean;
 
   files: File[] = [];
 
-  constructor(private cd: ChangeDetectorRef) {}
+  constructor() {}
 
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -20,6 +71,5 @@ export class UploaderComponent {
     for (let i = 0; i < files.length; i++) {
       this.files.push(files.item(i));
     }
-    this.cd.markForCheck();
   }
 }
