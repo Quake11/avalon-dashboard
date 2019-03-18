@@ -1,8 +1,6 @@
 <div class="dropzone" appDropzone (hovered)="toggleHover($event)" (dropped)="onDrop($event)" [class.hovering]="isHovering">
-  <h2>Перетащите сюда файлы или кликните для загрузки файлов.</h2>
+  <h2>Перетащите сюда файлы или кликните для выбора файлов.</h2>
 </div>
-
-
 
 <div class="uploads" *ngIf="files.length > 0" @fadeIn>
   <h3>Загрузки</h3>
