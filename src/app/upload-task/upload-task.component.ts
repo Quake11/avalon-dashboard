@@ -1,16 +1,23 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { finalize, tap, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upload-task',
   templateUrl: './upload-task.component.html',
-  styleUrls: ['./upload-task.component.scss']
+  styleUrls: ['./upload-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UploadTaskComponent implements OnInit {
   @Input() file: File;
@@ -42,7 +49,10 @@ export class UploadTaskComponent implements OnInit {
   readLocalUrl() {
     const reader = new FileReader();
 
-    reader.onload = () => (this.localUrl = reader.result);
+    reader.onload = () => {
+      this.localUrl = reader.result;
+      this.ref.detectChanges();
+    };
     reader.readAsDataURL(this.file);
   }
 

@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import {
   trigger,
-  state,
   style,
   transition,
   animate,
@@ -13,6 +16,7 @@ import {
   selector: 'app-uploader',
   templateUrl: './uploader.component.html',
   styleUrls: ['./uploader.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('fadeIn', [
       transition(':enter', [
@@ -28,7 +32,7 @@ import {
       ])
     ]),
 
-    trigger('listAnimation', [
+    trigger('list', [
       transition('* => *', [
         query(
           ':leave',
@@ -61,7 +65,7 @@ export class UploaderComponent {
 
   files: File[] = [];
 
-  constructor() {}
+  constructor(private ref: ChangeDetectorRef) {}
 
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -70,6 +74,7 @@ export class UploaderComponent {
   onDrop(files: FileList) {
     for (let i = 0; i < files.length; i++) {
       this.files.push(files.item(i));
+      this.ref.detectChanges();
     }
   }
 }
