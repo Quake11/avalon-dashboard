@@ -4,7 +4,7 @@
 
 <div class="uploads" *ngIf="files.length > 0" @fadeIn>
   <h3>Загрузки</h3>
-  <div class="tasks" [@listAnimation]="files.length">
+  <div class="tasks" [@list]="files.length">
     <app-upload-task *ngFor="let file of files" [file]="file"></app-upload-task>
   </div>
 </div>
