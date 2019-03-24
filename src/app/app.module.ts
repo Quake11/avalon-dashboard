@@ -18,6 +18,7 @@ import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPasswordStrengthModule } from '@angular-material-extensions/password-strength';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { MatIconModule } from '@angular/material/icon';
     AngularFireStorageModule,
     BrowserAnimationsModule, // imports firebase/storage only needed for storage features
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatPasswordStrengthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
