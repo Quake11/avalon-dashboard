@@ -1,0 +1,32 @@
+<div class="wrapper" (mouseover)="hover=true" (mouseleave)="hover=false" [class.zoomed]="zoomed">
+  <img *ngIf="isImage && localUrl" [src]="localUrl | safe: 'url'" [class.loading]="isLoading">
+  <video *ngIf="isVideo && localUrl" autoplay loop [muted]="isMuted" [src]="localUrl | safe: 'url'"
+    [class.loading]="isLoading"></video>
+  <img *ngIf="!isImage && !isVideo" src="assets/file.svg" style="object-fit: contain;" [class.loading]="isLoading">
+
+  <div class="overlay" [hidden]="!hover">
+    <div class="controls" *ngIf="(snapshot | async) as snap">
+      <a download mat-icon-button *ngIf="downloadURL | async as url" [href]="url" target="_blank">
+        <mat-icon style="color: white">cloud_download</mat-icon>
+      </a>
+
+      <button mat-icon-button *ngIf="isVideo || isImage" (click)="toggleZoom()">
+        <mat-icon *ngIf="!zoomed" style="color: white">zoom_in</mat-icon>
+        <mat-icon *ngIf="zoomed" style="color: white">zoom_out</mat-icon>
+      </button>
+
+      <button mat-icon-button *ngIf="isVideo" (click)="isMuted = !isMuted">
+        <mat-icon *ngIf="!isMuted" style="color: white">volume_up</mat-icon>
+        <mat-icon *ngIf="isMuted" style="color: white">volume_off</mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="delete()">
+        <mat-icon color="warn">delete</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="meta" *ngIf="!zoomed">
+  <p class="file-name">{{ filename }}<span class="ext">.{{ fileExt }}</span></p>
+  <app-progress-bar *ngIf="percent" [value]="percent"></app-progress-bar>
+</div>

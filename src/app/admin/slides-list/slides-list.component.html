@@ -1,0 +1,21 @@
+<ng-container *ngIf="list?.length > 0">
+  <h2>Слайды</h2>
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" *ngIf="list">
+    <div class="example-box" *ngFor="let slide of sortBy('sort')" cdkDrag>
+      <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+      {{ slide.name }}
+
+      <ng-container [ngSwitch]="slide.type">
+        <ng-template [ngSwitchCase]="'image'">
+          <img *cdkDragPreview [src]="slide.downloadURL" [alt]="slide.name">
+        </ng-template>
+        <ng-template [ngSwitchCase]="'video'">
+          <video *cdkDragPreview [src]="slide.downloadURL" loop autoplay [muted]="true"></video>
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+
+  <h4 *ngIf="saved" style="color: green">Сохранено</h4>
+  <h4 *ngIf="!saved" style="color: red">Идёт сохранение...</h4>
+</ng-container>

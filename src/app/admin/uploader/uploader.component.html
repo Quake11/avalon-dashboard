@@ -1,0 +1,13 @@
+<input hidden type="file" multiple #uploader (change)="onUpload($event.target.files)" />
+<div class="dropzone" appDropzone (hovered)="toggleHover($event)" (dropped)="onUpload($event)"
+  (click)="uploader.click()" [class.hovering]="isHovering">
+  <h2>Перетащите сюда файлы или кликните для выбора файлов.</h2>
+</div>
+
+<div class="uploads" *ngIf="files.length > 0" @fadeIn>
+  <h3>Загрузки</h3>
+  <div class="tasks" [@list]="files.length">
+    <app-upload-task *ngFor="let file of files;let i = index" [file]="file" [index]="i"
+      (deleteEvent)="deleteItem($event)"></app-upload-task>
+  </div>
+</div>

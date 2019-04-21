@@ -1,0 +1,13 @@
+<ng-container *ngIf="slides?.length > 0">
+  <div *ngFor="let slide of sortBy('sort');let i = index" [hidden]="currentSlide != i"
+    [@slideAnimation]="currentSlide === i ? 'active' : 'inactive'">
+    <ng-container [ngSwitch]="slide.type">
+      <ng-template [ngSwitchCase]="'image'">
+        <img [src]="slide.downloadURL" [alt]="slide.name">
+      </ng-template>
+      <ng-template [ngSwitchCase]="'video'">
+        <video [src]="slide.downloadURL" loop autoplay [muted]="true"></video>
+      </ng-template>
+    </ng-container>
+  </div>
+</ng-container>

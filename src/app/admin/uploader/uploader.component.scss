@@ -4,13 +4,17 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-weight: 200;
   height: 250px;
   border: 2px dashed rgb(0, 110, 255);
   border-radius: 5px;
   background: white;
   transition: 200ms;
   text-align: center;
+  cursor: pointer;
+
+  h2 {
+    font-weight: 400;
+  }
 
   &.hovering {
     border: 2px solid rgb(0, 110, 255);

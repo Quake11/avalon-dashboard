@@ -65,16 +65,29 @@ export class UploaderComponent {
 
   files: File[] = [];
 
-  constructor(private ref: ChangeDetectorRef) {}
+  constructor(private ref: ChangeDetectorRef) { }
 
   toggleHover(event: boolean) {
     this.isHovering = event;
   }
 
-  onDrop(files: FileList) {
+  onUpload(files: FileList) {
+    console.log(files);
+
     for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i));
+      const item = files.item(i);
+      if (item.size === 0) {
+        console.log(`File '${item.name}' has no size`);
+
+        continue;
+      }
+
+      this.files.push(item);
       this.ref.detectChanges();
     }
+  }
+
+  deleteItem(index: number) {
+    this.files.splice(index, 1);
   }
 }
