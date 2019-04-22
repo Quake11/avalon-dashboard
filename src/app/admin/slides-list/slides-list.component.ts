@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { SlidesService } from 'src/app/slides.service';
 
 @Component({
   selector: 'app-slides-list',
@@ -13,19 +14,27 @@ export class SlidesListComponent implements OnInit {
   list$: Observable<any>;
   list: Array<any>;
 
-  saved = true;
+  saved: boolean;
 
-  constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) { }
+  constructor(
+    private afs: AngularFirestore,
+    private ref: ChangeDetectorRef,
+    private slides: SlidesService
+  ) {}
 
   ngOnInit() {
-    this.list$ = this.afs.collection('slides').snapshotChanges().pipe(
-      map(slides => {
-        return slides.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        });
-      }));
+    this.list$ = this.afs
+      .collection('slides')
+      .snapshotChanges()
+      .pipe(
+        map(slides => {
+          return slides.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
 
     this.list$.subscribe(value => {
       this.list = value;
@@ -45,7 +54,9 @@ export class SlidesListComponent implements OnInit {
 
     for (let i = 0; i < this.list.length; i++) {
       this.list[i].sort = i;
-      updates.push(this.afs.collection('slides').doc(this.list[i].id).update({ sort: this.list[i].sort }));
+      updates.push(
+        this.slides.update(this.list[i].id, { sort: this.list[i].sort })
+      );
     }
 
     Promise.all(updates).then(() => {
@@ -57,6 +68,12 @@ export class SlidesListComponent implements OnInit {
   }
 
   sortBy(prop: string) {
-    return this.list.sort((a, b) => a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1);
+    return this.list.sort((a, b) =>
+      a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1
+    );
+  }
+
+  delete(id: string, pathStorage: string) {
+    this.slides.delete(id, pathStorage);
   }
 }

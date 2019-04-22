@@ -1,0 +1,16 @@
+<ng-container *ngIf="(value$ | async) as value">
+  <h3>Интервал для слайдов</h3>
+  <p>Текущее значение: {{ formatLabel(value) }}</p>
+  <mat-slider
+    color="primary"
+    thumbLabel
+    tickInterval="1000"
+    min="1"
+    max="120"
+    [displayWith]="formatLabel"
+    [value]="value"
+    (change)="onChange($event)"
+  ></mat-slider>
+  <h4 *ngIf="saved === true" style="color: green">Сохранено</h4>
+  <h4 *ngIf="saved === false" style="color: red">Идёт сохранение...</h4>
+</ng-container>

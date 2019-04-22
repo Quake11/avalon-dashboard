@@ -2,3 +2,52 @@ img,
 video {
   height: 100vh;
 }
+
+.slide {
+  position: absolute;
+  opacity: 1;
+  transition: 400ms;
+
+  &.hidden {
+    transition: 2000ms;
+    opacity: 0;
+  }
+}
+
+.datetime {
+  z-index: 999;
+  position: absolute;
+  bottom: 5%;
+  background: #00000080;
+  padding: 25px;
+  border-radius: 5px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+    text-shadow: 4px 3px 0px #000;
+
+  .time {
+    font-size: 100px;
+  }
+
+  .dates {
+    display: flex;
+    flex-direction: column;
+
+    .date {
+      margin: 10px;
+      font-size: 40px;
+    }
+  }
+
+
+  > * {
+    margin: 15px;
+  }
+}
+
+* {
+  font-family: Candara, 'Times New Roman', serif;
+}

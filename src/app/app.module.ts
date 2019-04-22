@@ -18,6 +18,7 @@ import { ProgressBarComponent } from './admin/uploader/progress-bar/progress-bar
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -25,6 +26,7 @@ import { MatPasswordStrengthModule } from '@angular-material-extensions/password
 import { SlidesListComponent } from './admin/slides-list/slides-list.component';
 import { AdminComponent } from './admin/admin.component';
 import { HomeComponent } from './home/home.component';
+import { SlidesIntervalComponent } from './admin/slides-interval/slides-interval.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { HomeComponent } from './home/home.component';
     ProgressBarComponent,
     SlidesListComponent,
     AdminComponent,
-    HomeComponent
+    HomeComponent,
+    SlidesIntervalComponent
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ import { HomeComponent } from './home/home.component';
     BrowserAnimationsModule, // imports firebase/storage only needed for storage features
     MatButtonModule,
     MatIconModule,
+    MatSliderModule,
     DragDropModule,
     MatPasswordStrengthModule
   ],

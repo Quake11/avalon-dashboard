@@ -14,6 +14,7 @@ import {
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
+import { SlidesService } from 'src/app/slides.service';
 
 @Component({
   selector: 'app-upload-task',
@@ -24,10 +25,10 @@ import { finalize, tap } from 'rxjs/operators';
 export class UploadTaskComponent implements OnInit {
   @Output() deleteEvent: EventEmitter<number> = new EventEmitter();
 
-
   @Input() file: File;
   @Input() index: number;
 
+  id: string;
 
   filename: string;
   fileExt: string;
@@ -60,8 +61,9 @@ export class UploadTaskComponent implements OnInit {
   constructor(
     private storage: AngularFireStorage,
     private afs: AngularFirestore,
-    private ref: ChangeDetectorRef
-  ) { }
+    private ref: ChangeDetectorRef,
+    private slides: SlidesService
+  ) {}
 
   ngOnInit() {
     this.startUpload();
@@ -130,18 +132,19 @@ export class UploadTaskComponent implements OnInit {
         this.downloadURL = ref.getDownloadURL().toPromise();
         // console.log(this.downloadURL);
 
-        this.afs
-          .collection('slides')
+        this.slides
           .add({
             downloadURL: await this.downloadURL,
             path: this.pathStorage,
             name,
             type: this.type || null,
             sort: 0
-          }).then(result => {
+          })
+          .then(result => {
+            this.id = result.id;
+
             this.pathDb = result.path;
           });
-
       })
     );
   }
@@ -162,8 +165,7 @@ export class UploadTaskComponent implements OnInit {
   }
 
   delete() {
-    this.afs.doc(this.pathDb).delete();
-    this.storage.ref(this.pathStorage).delete();
+    this.slides.delete(this.id, this.pathStorage);
     this.deleteEvent.emit(this.index);
   }
 }
