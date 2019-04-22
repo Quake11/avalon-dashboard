@@ -11,8 +11,7 @@ import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { SlidesService } from 'src/app/slides.service';
 
@@ -58,12 +57,13 @@ export class UploadTaskComponent implements OnInit {
 
   hover: boolean;
 
+  uploadedFileSub: Subscription;
+
   constructor(
     private storage: AngularFireStorage,
-    private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private slides: SlidesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.startUpload();
@@ -142,8 +142,14 @@ export class UploadTaskComponent implements OnInit {
           })
           .then(result => {
             this.id = result.id;
-
             this.pathDb = result.path;
+
+            this.slides.get(this.id).subscribe(data => {
+              console.log(data);
+              if (!data.payload.exists) {
+                this.delete(true);
+              }
+            });
           });
       })
     );
@@ -164,8 +170,10 @@ export class UploadTaskComponent implements OnInit {
     return this.percent < 100;
   }
 
-  delete() {
-    this.slides.delete(this.id, this.pathStorage);
-    this.deleteEvent.emit(this.index);
+  delete(isDeleted: boolean) {
+    if (isDeleted) {
+      this.slides.delete(this.id, this.pathStorage);
+      this.deleteEvent.emit(this.index);
+    }
   }
 }

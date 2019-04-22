@@ -93,7 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ]
   };
 
-  constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) {}
+  constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.datetimeSub = interval(1000).subscribe(() => {
@@ -124,7 +124,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     try {
       this.autoPlaySub.unsubscribe();
-    } catch (error) {}
+    } catch (error) { }
   }
 
   setDate() {
@@ -178,5 +178,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.slides.sort((a, b) =>
       a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1
     );
+  }
+
+  trackByFn(index, slide) {
+    return slide.id; // or item.id
   }
 }

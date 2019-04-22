@@ -19,6 +19,8 @@ import { ProgressBarComponent } from './admin/uploader/progress-bar/progress-bar
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -27,6 +29,9 @@ import { SlidesListComponent } from './admin/slides-list/slides-list.component';
 import { AdminComponent } from './admin/admin.component';
 import { HomeComponent } from './home/home.component';
 import { SlidesIntervalComponent } from './admin/slides-interval/slides-interval.component';
+import { HoldableDirective } from './holdable.directive';
+import { SlideComponent } from './admin/slides-list/slide/slide.component';
+import { HoldableDeleteComponent } from './shared/holdable-delete/holdable-delete.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +44,10 @@ import { SlidesIntervalComponent } from './admin/slides-interval/slides-interval
     SlidesListComponent,
     AdminComponent,
     HomeComponent,
-    SlidesIntervalComponent
+    SlidesIntervalComponent,
+    HoldableDirective,
+    SlideComponent,
+    HoldableDeleteComponent
   ],
   imports: [
     BrowserModule,
@@ -52,10 +60,12 @@ import { SlidesIntervalComponent } from './admin/slides-interval/slides-interval
     MatButtonModule,
     MatIconModule,
     MatSliderModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule,
     DragDropModule,
     MatPasswordStrengthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

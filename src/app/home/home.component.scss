@@ -1,12 +1,17 @@
 img,
 video {
-  height: 100vh;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .slide {
   position: absolute;
   opacity: 1;
   transition: 400ms;
+  max-height: 100vh;
+  width: 56.25%;
+  overflow: hidden;
 
   &.hidden {
     transition: 2000ms;
@@ -26,7 +31,7 @@ video {
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-    text-shadow: 4px 3px 0px #000;
+  text-shadow: 4px 3px 0px #000;
 
   .time {
     font-size: 100px;
@@ -43,7 +48,7 @@ video {
   }
 
 
-  > * {
+  >* {
     margin: 15px;
   }
 }

@@ -1,0 +1,5 @@
+<button mat-icon-button appHoldable (holdTime)="delete($event)" class="delete"
+  matTooltip="Удерживайте кнопку для удаления" matTooltipPosition="above" matTooltipShowDelay="50">
+  <mat-progress-spinner diameter="75" color="warn" [value]="progress" mode="determinate"></mat-progress-spinner>
+  <mat-icon color="warn">delete</mat-icon>
+</button>

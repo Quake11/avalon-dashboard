@@ -1,0 +1,9 @@
+button.delete {
+  position: relative;
+
+  mat-progress-spinner {
+    position: absolute;
+    right: -17px;
+    top: -17px;
+  }
+}

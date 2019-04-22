@@ -20,9 +20,8 @@
         <mat-icon *ngIf="isMuted" style="color: white">volume_off</mat-icon>
       </button>
 
-      <button mat-icon-button (click)="delete()">
-        <mat-icon color="warn">delete</mat-icon>
-      </button>
+      <app-holdable-delete (deleted)="delete($event)"></app-holdable-delete>
+
     </div>
   </div>
 </div>

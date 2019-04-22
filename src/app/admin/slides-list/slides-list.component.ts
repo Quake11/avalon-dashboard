@@ -4,11 +4,29 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SlidesService } from 'src/app/slides.service';
+import { trigger, transition, animate, style, sequence } from '@angular/animations';
 
 @Component({
   selector: 'app-slides-list',
   templateUrl: './slides-list.component.html',
-  styleUrls: ['./slides-list.component.scss']
+  styleUrls: ['./slides-list.component.scss'],
+  animations: [
+    trigger('delete', [
+      transition('* => void', [
+        sequence([
+          animate('250ms ease-out', style({
+            opacity: 0.9,
+            transform: 'perspective(500px) translate3d(0, 0, -50px)'
+          })),
+          animate('300ms ease-out', style({
+            opacity: 0,
+            transform: 'perspective(500px) translate3d(-150px, 0, -50px)'
+          }))
+        ])
+
+      ])
+    ])
+  ]
 })
 export class SlidesListComponent implements OnInit {
   list$: Observable<any>;
@@ -20,7 +38,7 @@ export class SlidesListComponent implements OnInit {
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private slides: SlidesService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.list$ = this.afs
@@ -73,7 +91,7 @@ export class SlidesListComponent implements OnInit {
     );
   }
 
-  delete(id: string, pathStorage: string) {
-    this.slides.delete(id, pathStorage);
+  trackByFn(index, slide) {
+    return slide.id; // or item.id
   }
 }
