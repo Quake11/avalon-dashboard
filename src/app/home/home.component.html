@@ -1,9 +1,6 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div
-    *ngFor="let slide of sortBy('sort'); let i = index; trackBy: trackByFn"
-    [ngClass]="{ hidden: currentSlide !== i }"
-    class="slide"
-  >
+  <div *ngFor="let slide of sortBy('sort'); let i = index; trackBy: trackByFn"
+    [ngClass]="{ hidden: currentSlide !== i }" class="slide">
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
         <img [src]="slide.downloadURL" [alt]="slide.name" />
@@ -31,20 +28,21 @@
 
 <div class="info">
   <div class="weather info-block">
-    <div class="weather-block" *ngIf="(currentTemp$ | async) as temp">
+    <div class="weather-day" *ngIf="(currentTemp$ | async) as temp">
       <h2>Сегодня / Today</h2>
       <div class="morning">
         <h4>Сейчас / Now</h4>
         <span class="value">{{ temp }}</span>
       </div>
 
-      <div class="evening">
-        <h4>Вечером / Evening</h4>
-        <span class="value">+1</span>
+      <div class="forecast" *ngIf="forecastToday$ | async as forecast">
+        <h4 *ngIf="forecast.type === 'morning'">Утром / Morning</h4>
+        <h4 *ngIf="forecast.type === 'evening'">Вечером / Evening</h4>
+        <span class="value">{{ forecast.value }}</span>
       </div>
     </div>
 
-    <div class="weather-block">
+    <div class="weather-day">
       <h2>Завтра / Tomorrow</h2>
       <div class="morning">
         <h4>Утром / Morning</h4>
@@ -58,5 +56,5 @@
     </div>
   </div>
 
-  <div class="currency info-block">test2</div>
+  <div class="currency info-block"> currency </div>
 </div>

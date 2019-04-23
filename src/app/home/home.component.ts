@@ -51,6 +51,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   dateENG: string;
   time: string;
 
+  currentTemp$: Observable<string>;
+  forecastToday$: Observable<{}>;
+
   daysOfWeek = {
     ru: [
       'Воскресенье',
@@ -94,20 +97,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     ]
   };
 
-  currentWeather$: Observable<any>;
-  currentTemp$: Observable<string>;
-
-  forecastWeather$: Observable<any>;
 
   constructor(
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private weather: WeatherService
-  ) {}
+  ) { }
 
   ngOnInit() {
-    console.log(new Date(new Date().setHours(21, 0, 0, 0)).getTime() / 1000);
-
     this.setWeather();
 
     this.datetimeSub = interval(1000).subscribe(() => {
@@ -139,14 +136,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     try {
       this.autoPlaySub.unsubscribe();
       this.datetimeSub.unsubscribe();
-    } catch (error) {}
+    } catch (error) { }
   }
 
   setWeather() {
-    this.currentWeather$ = this.weather.getCurrent();
-    this.forecastWeather$ = this.weather.getForecast();
-
-    this.currentTemp$ = this.weather.currentTemp$;
+    this.currentTemp$ = this.weather.currentTempRealtime$;
+    this.forecastToday$ = this.weather.forecastTodayRealtime$;
   }
 
   setDate() {
@@ -172,8 +167,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.time = `${hours}:${minutes}`;
     this.dateRU = `${dayOfWeekRU}, ${day} ${monthRU} ${year} года`;
     this.dateENG = `${dayOfWeekENG}, the ${day} of ${monthENG}, ${year}`;
-
-    console.log(dateRef.toLocaleString('en'));
 
     this.ref.markForCheck();
   }

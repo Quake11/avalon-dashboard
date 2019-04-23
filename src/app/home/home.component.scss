@@ -13,8 +13,9 @@
   .slide {
     position: absolute;
     opacity: 1;
-    transition: 400ms linear;
+    transition: opacity 400ms linear;
     width: 56.25vw;
+    max-height: 100vh;
     overflow: hidden;
 
     img,
@@ -25,7 +26,7 @@
     }
 
     &.hidden {
-      transition: 2000ms linear;
+      transition: opacity 2000ms linear;
       opacity: 0;
     }
   }
@@ -58,7 +59,7 @@
       }
     }
 
-    > * {
+    >* {
       margin: 25px;
       padding: 15px;
     }
@@ -71,7 +72,7 @@
   flex: 1;
   justify-content: flex-start;
   align-items: center;
-  padding: 15px;
+  padding: 0 15px;
   color: white;
 
   .info-block {
@@ -79,39 +80,44 @@
     background: #434242;
     border-radius: 10px;
     box-shadow: 4px 4px 4px black;
-  }
+    margin: 15px;
 
-  .weather {
-    .weather-block {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      margin: 50px 0;
 
-      h2 {
-        flex-basis: 100%;
-        margin-bottom: 0;
-        margin-top: 10px;
-        font-size: 5vh;
-      }
+    &.weather {
+      .weather-day {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        margin: 50px 0;
 
-      .morning,
-      .evening {
-        padding: 0 25px;
-        font-size: 3vh;
-
-        h4 {
-          margin: 1vh;
+        h2 {
+          flex-basis: 100%;
+          margin-bottom: 0;
+          margin-top: 10px;
+          font-size: 5vh;
         }
 
-        .value {
-          font-size: 6vh;
-          font-weight: bold;
+        .morning,
+        .evening,
+        .forecast {
+          padding: 0 25px;
+          font-size: 3vh;
+
+          h4 {
+            margin: 1vh;
+          }
+
+          .value {
+            font-size: 6vh;
+            font-weight: bold;
+          }
         }
       }
     }
   }
+
+
 }
 
 * {
