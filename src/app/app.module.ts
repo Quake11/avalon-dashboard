@@ -32,6 +32,7 @@ import { SlidesIntervalComponent } from './admin/slides-interval/slides-interval
 import { HoldableDirective } from './holdable.directive';
 import { SlideComponent } from './admin/slides-list/slide/slide.component';
 import { HoldableDeleteComponent } from './shared/holdable-delete/holdable-delete.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { HoldableDeleteComponent } from './shared/holdable-delete/holdable-delet
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
@@ -68,4 +70,4 @@ import { HoldableDeleteComponent } from './shared/holdable-delete/holdable-delet
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

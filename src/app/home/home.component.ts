@@ -9,6 +9,7 @@ import {
   animate
 } from '@angular/animations';
 import { map, filter } from 'rxjs/operators';
+import { WeatherService } from '../weather.service';
 
 @Component({
   selector: 'app-home',
@@ -93,9 +94,22 @@ export class HomeComponent implements OnInit, OnDestroy {
     ]
   };
 
-  constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) { }
+  currentWeather$: Observable<any>;
+  currentTemp$: Observable<string>;
+
+  forecastWeather$: Observable<any>;
+
+  constructor(
+    private afs: AngularFirestore,
+    private ref: ChangeDetectorRef,
+    private weather: WeatherService
+  ) {}
 
   ngOnInit() {
+    console.log(new Date(new Date().setHours(21, 0, 0, 0)).getTime() / 1000);
+
+    this.setWeather();
+
     this.datetimeSub = interval(1000).subscribe(() => {
       this.setDate();
     });
@@ -124,7 +138,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     try {
       this.autoPlaySub.unsubscribe();
-    } catch (error) { }
+      this.datetimeSub.unsubscribe();
+    } catch (error) {}
+  }
+
+  setWeather() {
+    this.currentWeather$ = this.weather.getCurrent();
+    this.forecastWeather$ = this.weather.getForecast();
+
+    this.currentTemp$ = this.weather.currentTemp$;
   }
 
   setDate() {

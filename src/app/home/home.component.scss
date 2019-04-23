@@ -1,55 +1,116 @@
-img,
-video {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-}
-
-.slide {
-  position: absolute;
-  opacity: 1;
-  transition: 400ms;
-  max-height: 100vh;
-  width: 56.25%;
-  overflow: hidden;
-
-  &.hidden {
-    transition: 2000ms;
-    opacity: 0;
-  }
-}
-
-.datetime {
-  z-index: 999;
-  position: absolute;
-  bottom: 5%;
-  background: #00000080;
-  padding: 25px;
-  border-radius: 5px;
-  color: white;
+:host {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  font-weight: bold;
-  text-shadow: 4px 3px 0px #000;
+  overflow: hidden;
+  background-color: #2b2a29;
+}
 
-  .time {
-    font-size: 100px;
-  }
+.slides {
+  width: 56.25%;
+  height: 100vh;
+  overflow: hidden;
 
-  .dates {
-    display: flex;
-    flex-direction: column;
+  .slide {
+    position: absolute;
+    opacity: 1;
+    transition: 400ms linear;
+    width: 56.25vw;
+    overflow: hidden;
 
-    .date {
-      margin: 10px;
-      font-size: 40px;
+    img,
+    video {
+      height: 100vh;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    &.hidden {
+      transition: 2000ms linear;
+      opacity: 0;
     }
   }
 
+  .datetime {
+    z-index: 999;
+    position: absolute;
+    bottom: 0;
+    background: #00000080;
+    border-radius: 5px;
+    color: white;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-weight: bold;
+    text-shadow: 4px 3px 0px #000;
+    width: 56.25vw;
 
-  >* {
-    margin: 15px;
+    .time {
+      font-size: 10vh;
+    }
+
+    .dates {
+      display: flex;
+      flex-direction: column;
+
+      .date {
+        margin: 10px;
+        font-size: 4vh;
+      }
+    }
+
+    > * {
+      margin: 25px;
+      padding: 15px;
+    }
+  }
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 15px;
+  color: white;
+
+  .info-block {
+    text-align: center;
+    background: #434242;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px black;
+  }
+
+  .weather {
+    .weather-block {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin: 50px 0;
+
+      h2 {
+        flex-basis: 100%;
+        margin-bottom: 0;
+        margin-top: 10px;
+        font-size: 5vh;
+      }
+
+      .morning,
+      .evening {
+        padding: 0 25px;
+        font-size: 3vh;
+
+        h4 {
+          margin: 1vh;
+        }
+
+        .value {
+          font-size: 6vh;
+          font-weight: bold;
+        }
+      }
+    }
   }
 }
 
