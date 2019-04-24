@@ -21,6 +21,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -63,11 +67,15 @@ import { HttpClientModule } from '@angular/common/http';
     MatIconModule,
     MatSliderModule,
     MatTooltipModule,
+    MatMenuModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule,
+    MatSnackBarModule,
+    MatChipsModule,
     DragDropModule,
     MatPasswordStrengthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

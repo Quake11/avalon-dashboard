@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
+import { Slide } from './interfaces/slide';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +19,31 @@ export class SlidesService {
   }
 
   get(id: string): Observable<any> {
-    return this.afs.collection('slides').doc(id).snapshotChanges();
+    return this.afs.collection<Slide>('slides').doc(id).snapshotChanges();
+  }
+
+  getAll(): Observable<any> {
+    return this.afs.collection<Slide>('slides').snapshotChanges().pipe(
+      map(slides => {
+        return slides.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );;
   }
 
   update(id: string, data: {}): Promise<any> {
     return this.afs
-      .collection('slides')
+      .collection<Slide>('slides')
       .doc(id)
       .update(data);
   }
 
   delete(id: string, pathStorage: string): Promise<any> {
     const deleteFromDb = this.afs
-      .collection('slides')
+      .collection<Slide>('slides')
       .doc(id)
       .delete();
     const deleteFromStorage = this.storage

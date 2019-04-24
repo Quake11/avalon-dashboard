@@ -10,6 +10,7 @@ import {
 } from '@angular/animations';
 import { map, filter } from 'rxjs/operators';
 import { WeatherService } from '../weather.service';
+import { Slide } from '../interfaces/slide';
 
 @Component({
   selector: 'app-home',
@@ -35,8 +36,8 @@ import { WeatherService } from '../weather.service';
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  slides$: Observable<Array<any>>;
-  slides: Array<any>;
+  slides$: Observable<Array<Slide>>;
+  slides: Array<Slide>;
 
   slidesLength: number;
   autoPlaySub: Subscription;
@@ -101,7 +102,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private weather: WeatherService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.setWeather();
@@ -110,7 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.setDate();
     });
 
-    this.slides$ = this.afs.collection('slides').valueChanges();
+    this.slides$ = this.afs.collection<Slide>('slides').valueChanges();
 
     this.autoPlayInterval$ = this.afs
       .collection('meta')
@@ -135,7 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     try {
       this.autoPlaySub.unsubscribe();
       this.datetimeSub.unsubscribe();
-    } catch (error) {}
+    } catch (error) { }
   }
 
   setWeather() {

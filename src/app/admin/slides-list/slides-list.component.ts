@@ -41,18 +41,7 @@ export class SlidesListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.list$ = this.afs
-      .collection('slides')
-      .snapshotChanges()
-      .pipe(
-        map(slides => {
-          return slides.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          });
-        })
-      );
+    this.list$ = this.slides.getAll();
 
     this.list$.subscribe(value => {
       this.list = value;
