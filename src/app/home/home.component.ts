@@ -51,8 +51,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   dateENG: string;
   time: string;
 
-  currentTemp$: Observable<string>;
-  forecastToday$: Observable<{}>;
+  currentTemp$: Observable<{}>;
+  forecast$: Observable<{}>;
 
   daysOfWeek = {
     ru: [
@@ -97,12 +97,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     ]
   };
 
-
   constructor(
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private weather: WeatherService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.setWeather();
@@ -136,12 +135,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     try {
       this.autoPlaySub.unsubscribe();
       this.datetimeSub.unsubscribe();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   setWeather() {
-    this.currentTemp$ = this.weather.currentTempRealtime$;
-    this.forecastToday$ = this.weather.forecastTodayRealtime$;
+    this.currentTemp$ = this.weather.currentRealtime$;
+    this.forecast$ = this.weather.forecastRealtime$;
   }
 
   setDate() {

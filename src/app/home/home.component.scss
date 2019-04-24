@@ -36,7 +36,9 @@
     position: absolute;
     bottom: 0;
     background: #00000080;
-    border-radius: 5px;
+    border-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     color: white;
     display: flex;
     justify-content: space-evenly;
@@ -59,7 +61,7 @@
       }
     }
 
-    >* {
+    > * {
       margin: 25px;
       padding: 15px;
     }
@@ -82,13 +84,11 @@
     box-shadow: 4px 4px 4px black;
     margin: 15px;
 
-
     &.weather {
       .weather-day {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        align-items: center;
         margin: 50px 0;
 
         h2 {
@@ -100,9 +100,13 @@
 
         .morning,
         .evening,
-        .forecast {
+        .forecast,
+        .now {
           padding: 0 25px;
           font-size: 3vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
 
           h4 {
             margin: 1vh;
@@ -112,12 +116,15 @@
             font-size: 6vh;
             font-weight: bold;
           }
+
+          .icon {
+            height: 10vh;
+            width: auto;
+          }
         }
       }
     }
   }
-
-
 }
 
 * {

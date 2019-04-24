@@ -1,6 +1,9 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div *ngFor="let slide of sortBy('sort'); let i = index; trackBy: trackByFn"
-    [ngClass]="{ hidden: currentSlide !== i }" class="slide">
+  <div
+    *ngFor="let slide of sortBy('sort'); let i = index; trackBy: trackByFn"
+    [ngClass]="{ hidden: currentSlide !== i }"
+    class="slide"
+  >
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
         <img [src]="slide.downloadURL" [alt]="slide.name" />
@@ -30,31 +33,39 @@
   <div class="weather info-block">
     <div class="weather-day" *ngIf="(currentTemp$ | async) as temp">
       <h2>Сегодня / Today</h2>
-      <div class="morning">
+      <div class="now">
         <h4>Сейчас / Now</h4>
-        <span class="value">{{ temp }}</span>
+        <span class="value">{{ temp.value }}</span>
+        <img [src]="temp.icon" class="icon" />
       </div>
 
-      <div class="forecast" *ngIf="forecastToday$ | async as forecast">
-        <h4 *ngIf="forecast.type === 'morning'">Утром / Morning</h4>
-        <h4 *ngIf="forecast.type === 'evening'">Вечером / Evening</h4>
-        <span class="value">{{ forecast.value }}</span>
+      <div class="forecast" *ngIf="(forecast$ | async) as forecast">
+        <h4 *ngIf="forecast.nearest.type === 'morning'">
+          Утром / Morning
+        </h4>
+        <h4 *ngIf="forecast.nearest.type === 'evening'">
+          Вечером / Evening
+        </h4>
+        <span class="value">{{ forecast.nearest.value }}</span>
+        <img [src]="forecast.nearest.icon" class="icon" />
       </div>
     </div>
 
-    <div class="weather-day">
+    <div class="weather-day" *ngIf="(forecast$ | async) as forecast">
       <h2>Завтра / Tomorrow</h2>
       <div class="morning">
         <h4>Утром / Morning</h4>
-        <span class="value">+15</span>
+        <span class="value">{{ forecast.tomorrow.morning.value }}</span>
+        <img [src]="forecast.tomorrow.morning.icon" class="icon" />
       </div>
 
       <div class="evening">
         <h4>Вечером / Evening</h4>
-        <span class="value">+5</span>
+        <span class="value">{{ forecast.tomorrow.evening.value }}</span>
+        <img [src]="forecast.tomorrow.evening.icon" class="icon" />
       </div>
     </div>
   </div>
 
-  <div class="currency info-block"> currency </div>
+  <div class="currency info-block">currency</div>
 </div>

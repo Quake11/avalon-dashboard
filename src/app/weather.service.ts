@@ -7,84 +7,146 @@ import { map, switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class WeatherService {
-
   updateTime = 30000;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  private get _current$(): Observable<any> {
+  private get _fetchCurrent$(): Observable<any> {
     return this.http.get(
       'https://api.openweathermap.org/data/2.5/weather?q=Syktyvkar&appid=6313de79c44a82fd9cfc511de8b2ffbb&lang=ru&units=metric'
     );
   }
 
-  private get _forecast$(): Observable<any> {
+  private get _fetchForecast$(): Observable<any> {
     return this.http.get(
       // tslint:disable-next-line: max-line-length
       'https://api.openweathermap.org/data/2.5/forecast?q=Syktyvkar&appid=6313de79c44a82fd9cfc511de8b2ffbb&lang=ru&lang=eng&units=metric'
     );
   }
 
-  private get _currentTemp$() {
-    return this._current$.pipe(
+  private get _current$() {
+    return this._fetchCurrent$.pipe(
       map(data => {
-        const tempValue = this.formatTemp(data.main.temp);
-        return tempValue;
+        const value = this.formatTemp(data.main.temp);
+        const icon = this.getIconLink(data.weather[0].icon);
+        return { value, icon };
       })
     );
   }
 
-  // TODO
-  private get _forecastToday$() {
-    return this._forecast$.pipe(
+  private get _forecast$() {
+    return this._fetchForecast$.pipe(
       map(data => {
-        const date = new Date();
+        const nearestForecastTime = this._nearestForecastTime;
+        const nearestForecast = data.list.find(
+          f => f.dt === nearestForecastTime['time']
+        );
+        const nearestForecastValue = this.formatTemp(
+          nearestForecast['main'].temp
+        );
+        const nearestForecastIcon = this.getIconLink(
+          nearestForecast['weather'][0].icon
+        );
 
-        const morning = date;
-        const evening = date;
+        const tomorrowForecastTime = this._tomorrowForecastTime;
 
-        let type: string;
-        let value: string;
+        // Tomorrow Morning
+        const tomorrowMorningForecast = data.list.find(
+          f => f.dt === tomorrowForecastTime['morningTime']
+        );
+        const tomorrowMorningForecastValue = this.formatTemp(
+          tomorrowMorningForecast.main.temp
+        );
+        const tomorrowMorningForecastIcon = this.getIconLink(
+          tomorrowMorningForecast.weather[0].icon
+        );
 
-        if (this.isEvening) {
-          type = 'morning';
-          if (date.getHours() >= 21) {
-            morning.setDate(morning.getDate() + 1);
-            morning.setHours(9, 0, 0, 0);
-          } else if (date.getHours() < 9) {
-            morning.setHours(9, 0, 0, 0);
+        // Tomorrow Evening
+        const tomorrowEveningForecast = data.list.find(
+          f => f.dt === tomorrowForecastTime['eveningTime']
+        );
+
+        const tomorrowEveningForecastValue = this.formatTemp(
+          tomorrowEveningForecast.main.temp
+        );
+        const tomorrowEveningForecastIcon = this.getIconLink(
+          tomorrowEveningForecast.weather[0].icon
+        );
+
+        // Result
+        const result = {
+          nearest: {
+            type: nearestForecastTime['type'],
+            value: nearestForecastValue,
+            icon: nearestForecastIcon
+          },
+          tomorrow: {
+            morning: {
+              value: tomorrowMorningForecastValue,
+              icon: tomorrowMorningForecastIcon
+            },
+            evening: {
+              value: tomorrowEveningForecastValue,
+              icon: tomorrowEveningForecastIcon
+            }
           }
-
-          const dt = morning.getTime() / 1000;
-          value = this.formatTemp(data.list.find(f => f.dt === dt).main.temp);
-        }
-
-        if (this.isDaytime) {
-          type = 'evening';
-          evening.setHours(21, 0, 0, 0);
-
-          const dt = evening.getTime() / 1000;
-          value = this.formatTemp(data.list.find(f => f.dt === dt).main.temp);
-        }
-
-        const result = { type, value };
+        };
         console.log(result);
-
 
         return result;
       })
     );
   }
 
+  // return timestamp of nearest time we need forecast for and its type
+  private get _nearestForecastTime(): object {
+    const morning = new Date();
+    const evening = new Date();
+    let type: string;
+    let time: number;
 
-  get currentTempRealtime$() {
-    return timer(0, this.updateTime).pipe(switchMap(() => this._currentTemp$));
+    if (this.isEvening) {
+      type = 'morning';
+      if (morning.getHours() >= 21) {
+        morning.setDate(morning.getDate() + 1);
+        morning.setHours(9, 0, 0, 0);
+      } else if (morning.getHours() < 9) {
+        morning.setHours(9, 0, 0, 0);
+      }
+
+      time = morning.getTime() / 1000;
+    } else if (this.isDaytime) {
+      type = 'evening';
+      evening.setHours(21, 0, 0, 0);
+
+      time = evening.getTime() / 1000;
+    }
+    return { time, type };
   }
 
-  get forecastTodayRealtime$() {
-    return timer(0, this.updateTime).pipe(switchMap(() => this._forecastToday$));
+  private get _tomorrowForecastTime(): object {
+    const morning = new Date();
+    const evening = new Date();
+
+    morning.setDate(morning.getDate() + 1);
+    morning.setHours(9, 0, 0, 0);
+
+    evening.setDate(evening.getDate() + 1);
+    evening.setHours(21, 0, 0, 0);
+
+    const morningTime = morning.getTime() / 1000;
+    const eveningTime = evening.getTime() / 1000;
+
+    return { morningTime, eveningTime };
   }
 
+  get currentRealtime$() {
+    return timer(0, this.updateTime).pipe(switchMap(() => this._current$));
+  }
+
+  get forecastRealtime$() {
+    return timer(0, this.updateTime).pipe(switchMap(() => this._forecast$));
+  }
 
   get isDaytime() {
     return new Date().getHours() < 21 && new Date().getHours() >= 9;
@@ -98,14 +160,25 @@ export class WeatherService {
     return !this.isDaytime;
   }
 
+  getIconLink(iconName: string) {
+    return `https://openweathermap.org/img/w/${iconName}.png`;
+  }
+
   formatTemp(t: string): string {
-    const temp = parseFloat(t);
+    const temp = parseInt(t, 10);
+
+    let result: string;
     if (temp > 0) {
-      return `+${temp.toPrecision(1)}`;
+      result = `+${temp}`;
+    } else if (temp < 0) {
+      result = `-${temp}`;
+    } else {
+      result = `${temp}`;
     }
-    if (temp < 0) {
-      return `-${temp.toPrecision(1)}`;
-    }
-    return temp.toPrecision(1);
+    return result;
+  }
+
+  isInt(n) {
+    return n % 1 === 0;
   }
 }
