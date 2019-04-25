@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
     private weather: WeatherService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.setWeather();
@@ -136,7 +136,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     try {
       this.autoPlaySub.unsubscribe();
       this.datetimeSub.unsubscribe();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   setWeather() {
@@ -189,10 +189,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.ref.markForCheck();
   }
 
-  sortBy(prop: string) {
-    return this.slides.sort((a, b) =>
-      a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1
-    );
+  sortSlides(prop: string) {
+    return this.slides
+      .filter(slide => slide.type === 'video' || slide.type === 'image')
+      .sort((a, b) => (a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1));
   }
 
   trackByFn(index, slide) {

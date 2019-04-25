@@ -1,6 +1,9 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div *ngFor="let slide of sortBy('sort'); let i = index; trackBy: trackByFn"
-    [ngClass]="{ 'hidden': currentSlide !== i, 'fullscreen': slide.fullscreen }" class="slide">
+  <div
+    *ngFor="let slide of sortSlides('sort'); let i = index; trackBy: trackByFn"
+    [ngClass]="{ hidden: currentSlide !== i, fullscreen: slide.fullscreen }"
+    class="slide"
+  >
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
         <img [src]="slide.downloadURL" [alt]="slide.name" />
@@ -28,7 +31,6 @@
 
 <div class="info">
   <div class="weather info-block">
-
     <ng-container *ngIf="(forecast$ | async) as forecast">
       <div class="weather-day" *ngIf="(currentTemp$ | async) as temp">
         <h2>Сегодня / Today</h2>
@@ -65,7 +67,6 @@
         </div>
       </div>
     </ng-container>
-
   </div>
 
   <div class="currency info-block">currency</div>
