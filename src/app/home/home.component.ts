@@ -11,6 +11,7 @@ import {
 import { map, filter } from 'rxjs/operators';
 import { WeatherService } from '../weather.service';
 import { Slide } from '../interfaces/slide';
+import { CurrencyService } from '../currency.service';
 
 @Component({
   selector: 'app-home',
@@ -54,6 +55,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   currentTemp$: Observable<{}>;
   forecast$: Observable<{}>;
+
+  currency$: Observable<{}>;
 
   daysOfWeek = {
     ru: [
@@ -101,10 +104,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private afs: AngularFirestore,
     private ref: ChangeDetectorRef,
-    private weather: WeatherService
+    private weather: WeatherService,
+    private currency: CurrencyService
   ) {}
 
   ngOnInit() {
+    this.currency$ = this.currency.currencyRealtime$;
     this.setWeather();
 
     this.datetimeSub = interval(1000).subscribe(() => {

@@ -1,6 +1,9 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div *ngFor="let slide of sortSlides('sort'); let i = index; trackBy: trackByFn"
-    [ngClass]="{ hidden: currentSlide !== i, fullscreen: slide.fullscreen }" class="slide">
+  <div
+    *ngFor="let slide of sortSlides('sort'); let i = index; trackBy: trackByFn"
+    [ngClass]="{ hidden: currentSlide !== i, fullscreen: slide.fullscreen }"
+    class="slide"
+  >
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
         <img [src]="slide.downloadURL" [alt]="slide.name" />
@@ -66,5 +69,9 @@
     </ng-container>
   </div>
 
-  <div class="currency info-block">currency</div>
+  <div class="currency info-block" *ngIf="(currency$ | async) as currency">
+    <h2>Курсы валют / Exchange rates</h2>
+    <div class="value">$ {{ currency.usd }}</div>
+    <div class="value">€ {{ currency.euro }}</div>
+  </div>
 </div>

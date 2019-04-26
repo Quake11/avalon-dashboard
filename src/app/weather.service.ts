@@ -7,7 +7,7 @@ import { map, switchMap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class WeatherService {
-  updateTime = 30000;
+  private updateTime = 30000;
 
   constructor(private http: HttpClient) {}
 
@@ -161,7 +161,8 @@ export class WeatherService {
   }
 
   getIconLink(iconName: string) {
-    return `https://openweathermap.org/img/w/${iconName}.png`;
+    return `assets/weather/${iconName}.svg`;
+    // return `https://openweathermap.org/img/w/${iconName}.png`;
   }
 
   formatTemp(t: string): string {
@@ -170,8 +171,6 @@ export class WeatherService {
     let result: string;
     if (temp > 0) {
       result = `+${temp}`;
-    } else if (temp < 0) {
-      result = `-${temp}`;
     } else {
       result = `${temp}`;
     }
