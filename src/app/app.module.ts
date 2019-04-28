@@ -38,6 +38,9 @@ import { SlideComponent } from './admin/slides-list/slide/slide.component';
 import { HoldableDeleteComponent } from './shared/holdable-delete/holdable-delete.component';
 import { HttpClientModule } from '@angular/common/http';
 
+import { NgxAuthFirebaseUIModule } from 'ngx-auth-firebaseui';
+import { LoginComponent } from './login/login.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -52,7 +55,8 @@ import { HttpClientModule } from '@angular/common/http';
     SlidesIntervalComponent,
     HoldableDirective,
     SlideComponent,
-    HoldableDeleteComponent
+    HoldableDeleteComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +77,12 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
     MatChipsModule,
     DragDropModule,
-    MatPasswordStrengthModule
+    MatPasswordStrengthModule,
+    NgxAuthFirebaseUIModule.forRoot(environment.firebase,
+      () => 'weather-dashboard',
+      {
+        authGuardFallbackURL: '/login'
+      })
   ],
   providers: [],
   bootstrap: [AppComponent]

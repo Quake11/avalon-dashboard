@@ -1,0 +1,9 @@
+<ng-container *ngIf="auth | async">
+  <ngx-auth-firebaseui-user></ngx-auth-firebaseui-user>
+  <a mat-raised-button routerLink="/admin" color="accent">Перейти к админке</a>
+</ng-container>
+
+
+
+<ngx-auth-firebaseui *ngIf="!(auth | async)" (onSuccess)="printUser($event)" (onError)="printError($event)">
+</ngx-auth-firebaseui>
