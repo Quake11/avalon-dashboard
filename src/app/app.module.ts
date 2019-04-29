@@ -78,13 +78,15 @@ import { LoginComponent } from './login/login.component';
     MatChipsModule,
     DragDropModule,
     MatPasswordStrengthModule,
-    NgxAuthFirebaseUIModule.forRoot(environment.firebase,
+    NgxAuthFirebaseUIModule.forRoot(
+      environment.firebase,
       () => 'weather-dashboard',
       {
         authGuardFallbackURL: '/login'
-      })
+      }
+    )
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

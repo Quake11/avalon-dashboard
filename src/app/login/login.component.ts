@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,8 +9,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
-  constructor(private afa: AngularFireAuth) { }
+  constructor(private afa: AngularFireAuth, private router: Router) {}
 
   auth: Observable<any>;
 
@@ -17,13 +17,12 @@ export class LoginComponent implements OnInit {
     this.auth = this.afa.authState;
   }
 
-
-
-  printUser(event) {
+  success(event) {
     console.log(event);
+    this.router.navigate(['admin']);
   }
 
-  printError(event) {
+  error(event) {
     console.error(event);
   }
 }
