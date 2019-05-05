@@ -1,21 +1,18 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
-
 @Component({
   selector: 'app-holdable-delete',
   templateUrl: './holdable-delete.component.html',
   styleUrls: ['./holdable-delete.component.scss']
 })
 export class HoldableDeleteComponent implements OnInit {
-
   @Output() deleted: EventEmitter<boolean> = new EventEmitter();
 
   progress: number;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   delete(progress) {
     this.progress = progress;

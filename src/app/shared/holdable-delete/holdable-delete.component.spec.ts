@@ -8,9 +8,8 @@ describe('HoldableDeleteComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HoldableDeleteComponent ]
-    })
-    .compileComponents();
+      declarations: [HoldableDeleteComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

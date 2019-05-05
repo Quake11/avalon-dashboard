@@ -11,8 +11,8 @@ export class CurrencyService {
 
   constructor(private http: HttpClient) {}
 
-  private get _currency$(): Observable<Map<string, number>> {
-    return this.http.get<Map<string, number>>(
+  private get _currency$(): Observable<{ USD_RUB: string; EUR_RUB: string }> {
+    return this.http.get<{ USD_RUB: string; EUR_RUB: string }>(
       'https://free.currconv.com/api/v7/convert?q=USD_RUB,EUR_RUB&compact=ultra&apiKey=dd8b32b19b601546b6a9'
     );
   }
@@ -22,8 +22,8 @@ export class CurrencyService {
       switchMap(() => this._currency$),
       map(data => {
         const result = {
-          usd: parseFloat(data['USD_RUB']).toPrecision(6),
-          euro: parseFloat(data['EUR_RUB']).toPrecision(6)
+          usd: parseFloat(data.USD_RUB).toPrecision(6),
+          euro: parseFloat(data.EUR_RUB).toPrecision(6)
         };
         console.log(result);
 

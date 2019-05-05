@@ -1,0 +1,46 @@
+<div class="info">
+  <div class="weather info-block">
+    <ng-container *ngIf="(forecast$ | async) as forecast">
+      <div class="weather-day" *ngIf="(currentTemp$ | async) as temp">
+        <h2>Сегодня / Today</h2>
+        <div class="now">
+          <h4>Сейчас / Now</h4>
+          <span class="value">{{ temp.value }}</span>
+          <img [src]="temp.icon" class="icon" />
+        </div>
+
+        <div class="forecast">
+          <h4 *ngIf="forecast.nearest.type === 'morning'">
+            Утром / Morning
+          </h4>
+          <h4 *ngIf="forecast.nearest.type === 'evening'">
+            Вечером / Evening
+          </h4>
+          <span class="value">{{ forecast.nearest.value }}</span>
+          <img [src]="forecast.nearest.icon" class="icon" />
+        </div>
+      </div>
+
+      <div class="weather-day">
+        <h2>Завтра / Tomorrow</h2>
+        <div class="morning">
+          <h4>Утром / Morning</h4>
+          <span class="value">{{ forecast.tomorrow.morning.value }}</span>
+          <img [src]="forecast.tomorrow.morning.icon" class="icon" />
+        </div>
+
+        <div class="evening">
+          <h4>Вечером / Evening</h4>
+          <span class="value">{{ forecast.tomorrow.evening.value }}</span>
+          <img [src]="forecast.tomorrow.evening.icon" class="icon" />
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="currency info-block" *ngIf="(currency$ | async) as currency">
+    <h2>Курсы валют / Exchange rates</h2>
+    <div class="value">$ {{ currency.usd }}</div>
+    <div class="value">€ {{ currency.euro }}</div>
+  </div>
+</div>

@@ -1,37 +1,30 @@
-/* import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserService } from '../services/user/user.service';
+import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, Router } from '@angular/router';
-import { AuthService } from './services/auth.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UtilsService } from './services/utils.service';
 
 @Injectable()
-export class RoleGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(
-    public auth: AuthService,
-    private utils: UtilsService,
+    public user: UserService,
+    private snackBar: MatSnackBar,
     private router: Router
   ) {}
 
   canActivate(next: ActivatedRouteSnapshot): Observable<boolean> {
-    const roles = next.data.roles;
-    return this.auth.user$.pipe(
+    return this.user.user$.pipe(
       map(user => {
-        const isAllowed = this.auth.checkAuthorization(user, roles);
-
-        if (!isAllowed) {
-          this.utils.addSingleToast({
-            severity: 'error',
-            summary: 'Отказано в доступе',
-            detail: 'Эта страница только для привилегированных пользователей'
+        if (!user.admin) {
+          this.snackBar.open('Эта страница только для администраторов', '', {
+            duration: 5000
           });
-          this.router.navigate(['/']);
+          this.router.navigate(['/login']);
+          return false;
         }
-
-        // console.log('isAllowed =', isAllowed);
-        return isAllowed;
+        return true;
       })
     );
   }
 }
- */

@@ -18,3 +18,8 @@ body {
 button .mat-icon {
   vertical-align: middle !important;
 }
+
+
+.hidetime:not(.hidden)~.datetime {
+  visibility: hidden;
+}

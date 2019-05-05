@@ -1,6 +1,15 @@
+<div class="navigation">
+  <a mat-raised-button routerLink="/" color="primary">
+    Посмотреть
+  </a>
+  <button mat-stroked-button (click)="signOut()" class="signout">
+    Выход
+  </button>
+</div>
+
 <app-uploader></app-uploader>
 
-<div style="display: flex; justify-content: center; flex-wrap: wrap;">
+<div class="settings">
   <app-slides-list></app-slides-list>
 
   <app-slides-interval></app-slides-interval>

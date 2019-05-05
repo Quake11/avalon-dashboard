@@ -6,4 +6,5 @@ export interface Slide {
   sort: number;
   type: string;
   fullscreen: boolean;
+  hidetime: boolean;
 }

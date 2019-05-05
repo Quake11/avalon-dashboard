@@ -1,11 +1,19 @@
-<ng-container *ngIf="(auth | async)">
+<ng-container *ngIf="auth$ | async">
   <ngx-auth-firebaseui-user></ngx-auth-firebaseui-user>
-  <a mat-raised-button routerLink="/admin" color="accent">Перейти к админке</a>
+  <a
+    mat-raised-button
+    routerLink="/admin"
+    color="accent"
+    *ngIf="isAdmin$ | async"
+    >Перейти к админке</a
+  >
 </ng-container>
 
 <ngx-auth-firebaseui
-  *ngIf="!(auth | async)"
-  (onSuccess)="success($event)"
+  *ngIf="!(auth$ | async)"
+  [providers]="[providers.Google]"
+  [guestEnabled]="false"
+  (onSuccess)="success()"
   (onError)="error($event)"
 >
 </ngx-auth-firebaseui>

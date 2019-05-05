@@ -3,6 +3,7 @@ import { MatSliderChange } from '@angular/material/slider';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
+import { Settings } from 'src/app/interfaces/settings';
 
 @Component({
   selector: 'app-slides-interval',
@@ -18,11 +19,11 @@ export class SlidesIntervalComponent implements OnInit {
   ngOnInit() {
     this.value$ = this.afs
       .collection('meta')
-      .doc('settings')
+      .doc<Settings>('settings')
       .valueChanges()
       .pipe(
-        filter(data => !!data),
-        map(data => data['slidesInterval'] / 1000)
+        filter(settings => !!settings),
+        map(settings => settings.slidesInterval / 1000)
       );
   }
 
@@ -30,7 +31,7 @@ export class SlidesIntervalComponent implements OnInit {
     this.saved = false;
     this.afs
       .collection('meta')
-      .doc('settings')
+      .doc<Settings>('settings')
       .update({ slidesInterval: event.value * 1000 })
       .then(() => {
         this.saved = true;

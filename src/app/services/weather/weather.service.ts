@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, interval, timer } from 'rxjs';
+import { Observable, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -39,20 +39,18 @@ export class WeatherService {
       map(data => {
         const nearestForecastTime = this._nearestForecastTime;
         const nearestForecast = data.list.find(
-          f => f.dt === nearestForecastTime['time']
+          f => f.dt === nearestForecastTime.time
         );
-        const nearestForecastValue = this.formatTemp(
-          nearestForecast['main'].temp
-        );
+        const nearestForecastValue = this.formatTemp(nearestForecast.main.temp);
         const nearestForecastIcon = this.getIconLink(
-          nearestForecast['weather'][0].icon
+          nearestForecast.weather[0].icon
         );
 
         const tomorrowForecastTime = this._tomorrowForecastTime;
 
         // Tomorrow Morning
         const tomorrowMorningForecast = data.list.find(
-          f => f.dt === tomorrowForecastTime['morningTime']
+          f => f.dt === tomorrowForecastTime.morningTime
         );
         const tomorrowMorningForecastValue = this.formatTemp(
           tomorrowMorningForecast.main.temp
@@ -63,7 +61,7 @@ export class WeatherService {
 
         // Tomorrow Evening
         const tomorrowEveningForecast = data.list.find(
-          f => f.dt === tomorrowForecastTime['eveningTime']
+          f => f.dt === tomorrowForecastTime.eveningTime
         );
 
         const tomorrowEveningForecastValue = this.formatTemp(
@@ -76,7 +74,7 @@ export class WeatherService {
         // Result
         const result = {
           nearest: {
-            type: nearestForecastTime['type'],
+            type: nearestForecastTime.type,
             value: nearestForecastValue,
             icon: nearestForecastIcon
           },
@@ -99,7 +97,7 @@ export class WeatherService {
   }
 
   // return timestamp of nearest time we need forecast for and its type
-  private get _nearestForecastTime(): object {
+  private get _nearestForecastTime(): { time: number; type: string } {
     const morning = new Date();
     const evening = new Date();
     let type: string;
@@ -124,7 +122,10 @@ export class WeatherService {
     return { time, type };
   }
 
-  private get _tomorrowForecastTime(): object {
+  private get _tomorrowForecastTime(): {
+    morningTime: number;
+    eveningTime: number;
+  } {
     const morning = new Date();
     const evening = new Date();
 

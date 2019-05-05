@@ -13,7 +13,7 @@ import {
 } from '@angular/fire/storage';
 import { Observable, Subscription } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
-import { SlidesService } from 'src/app/slides.service';
+import { SlidesService } from 'src/app/services/slides/slides.service';
 
 @Component({
   selector: 'app-upload-task',
@@ -63,7 +63,7 @@ export class UploadTaskComponent implements OnInit {
     private storage: AngularFireStorage,
     private ref: ChangeDetectorRef,
     private slides: SlidesService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.startUpload();
@@ -120,7 +120,6 @@ export class UploadTaskComponent implements OnInit {
     // this.percentage = this.task.percentageChanges();
 
     this.snapshot = this.task.snapshotChanges().pipe(
-      tap(console.log),
       tap(task => {
         this.percent = Math.round(
           (task.bytesTransferred / task.totalBytes) * 100

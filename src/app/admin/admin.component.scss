@@ -1,4 +1,20 @@
 :host {
   padding: 25px;
-  display: block;
+  display: flex;
+  flex-direction: column;
+}
+
+.navigation {
+  display: flex;
+  justify-content: flex-end;
+  button,
+  a {
+    margin: 15px;
+  }
+}
+
+.settings {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
