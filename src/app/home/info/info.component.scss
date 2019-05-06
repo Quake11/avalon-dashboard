@@ -11,6 +11,7 @@
   padding: 0 15px;
   color: white;
   max-height: 100vh;
+  height: 100%;
 
   .info-block {
     text-align: center;
@@ -20,15 +21,17 @@
     margin: 15px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: center;
 
     &.currency {
-      font-size: 6vh;
+      font-size: 5vh;
       font-weight: bold;
+      flex: 1;
+      align-items: center;
 
       .value {
         margin: 25px;
-        padding: 5px;
+        padding: 15px;
         display: flex;
         align-items: center;
 
