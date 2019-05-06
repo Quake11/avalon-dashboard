@@ -1,11 +1,12 @@
 export const environment = {
   production: true,
   firebase: {
-    apiKey: 'AIzaSyCUCHQ6GW5OBobwVI0wg4s0VP4tgOpxtXk',
-    authDomain: 'weather-dashboard-40fef.firebaseapp.com',
-    databaseURL: 'https://weather-dashboard-40fef.firebaseio.com',
-    projectId: 'weather-dashboard-40fef',
-    storageBucket: 'weather-dashboard-40fef.appspot.com',
-    messagingSenderId: '446593341648'
+    apiKey: 'AIzaSyBcEKd68gewOyLsBQoLfu1uP2u2DMbAlqw',
+    authDomain: 'avalon-dashboard.firebaseapp.com',
+    databaseURL: 'https://avalon-dashboard.firebaseio.com',
+    projectId: 'avalon-dashboard',
+    storageBucket: 'avalon-dashboard.appspot.com',
+    messagingSenderId: '316263391395',
+    appId: '1:316263391395:web:f2ab329c8480f2c8'
   }
 };
