@@ -21,6 +21,7 @@
       <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
       <mat-icon
+        *ngIf="list.length > 1"
         cdkDragHandle
         matTooltip="Перетащите для сортировки"
         matTooltipPosition="above"
