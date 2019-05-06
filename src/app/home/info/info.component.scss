@@ -2,7 +2,6 @@
   font-family: Candara, 'Times New Roman', serif;
 }
 
-
 .info {
   display: flex;
   flex-direction: column;
@@ -71,6 +70,10 @@
           .value {
             font-size: 6vh;
             font-weight: bold;
+            display: flex;
+            .celsium {
+              font-size: 3vh;
+            }
           }
 
           .icon {
