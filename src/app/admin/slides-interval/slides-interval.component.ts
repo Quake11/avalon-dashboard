@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Settings } from 'src/app/interfaces/settings';
 
 @Component({
@@ -22,8 +22,16 @@ export class SlidesIntervalComponent implements OnInit {
       .doc<Settings>('settings')
       .valueChanges()
       .pipe(
-        filter(settings => !!settings),
-        map(settings => settings.slidesInterval / 1000)
+        map(settings => {
+          if (!settings) {
+            this.afs
+              .collection('meta')
+              .doc<Settings>('settings')
+              .set({ slidesInterval: 5000 });
+          } else {
+            return settings.slidesInterval / 1000;
+          }
+        })
       );
   }
 
