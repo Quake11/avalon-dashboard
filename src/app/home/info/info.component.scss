@@ -1,4 +1,4 @@
-* {
+*:not(mat-icon) {
   font-family: Candara, 'Times New Roman', serif;
 }
 
@@ -29,6 +29,45 @@
       .value {
         margin: 25px;
         padding: 5px;
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+          height: 6vh;
+          width: 6vh;
+          font-size: 6vh;
+          line-height: 7vh;
+
+          &.up {
+            color: rgb(28, 206, 58);
+            animation: MoveUpDown 3s linear infinite;
+          }
+
+          &.down {
+            color: rgb(252, 47, 11);
+            animation: MoveDownUp 3s linear infinite;
+          }
+
+          @keyframes MoveUpDown {
+            0%,
+            100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(-10px);
+            }
+          }
+
+          @keyframes MoveDownUp {
+            0%,
+            100% {
+              transform: translateY(0);
+            }
+            50% {
+              transform: translateY(10px);
+            }
+          }
+        }
       }
     }
 

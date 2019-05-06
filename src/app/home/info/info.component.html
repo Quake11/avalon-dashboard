@@ -50,7 +50,21 @@
 
   <div class="currency info-block" *ngIf="currency$ | async as currency">
     <h2>Центр. банк / Central bank</h2>
-    <div class="value">$ {{ currency.usd }}</div>
-    <div class="value">€ {{ currency.euro }}</div>
+    <div class="value">
+      $ {{ currency.usd.value }}
+      <ng-container *ngIf="currency.usd.up; then up; else down"></ng-container>
+    </div>
+    <div class="value">
+      € {{ currency.euro.value }}
+      <ng-container *ngIf="currency.euro.up; then up; else down"></ng-container>
+    </div>
+
+    <ng-template #up>
+      <mat-icon class="up">arrow_drop_up</mat-icon>
+    </ng-template>
+
+    <ng-template #down>
+      <mat-icon class="down">arrow_drop_down</mat-icon>
+    </ng-template>
   </div>
 </div>
