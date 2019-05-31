@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 import { Slide } from '../interfaces/slide';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,14 @@ export class HomeComponent implements OnInit {
   constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.slides$ = this.afs.collection<Slide>('slides').valueChanges();
+    this.slides$ = this.afs
+      .collection<Slide>('slides')
+      .valueChanges()
+      .pipe(
+        map(slides => {
+          return slides.filter(slide => slide.visible);
+        })
+      );
 
     this.slides$.subscribe(slides => {
       this.slides = slides;

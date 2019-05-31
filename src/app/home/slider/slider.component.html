@@ -1,13 +1,9 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div
-    *ngFor="let slide of sortSlides('sort'); let i = index; trackBy: trackByFn"
-    [ngClass]="{
+  <div *ngFor="let slide of sortSlides('sort'); let i = index; trackBy: trackByFn" [ngClass]="{
       hidden: currentSlide !== i,
       fullscreen: slide.fullscreen,
       hidetime: slide.hidetime
-    }"
-    class="slide"
-  >
+    }" class="slide">
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
         <img [src]="slide.downloadURL" [alt]="slide.name" />

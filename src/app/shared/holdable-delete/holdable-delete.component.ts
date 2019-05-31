@@ -1,4 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Output,
+  EventEmitter,
+  Input,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-holdable-delete',
@@ -7,18 +14,24 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 })
 export class HoldableDeleteComponent implements OnInit {
   @Output() deleted: EventEmitter<boolean> = new EventEmitter();
+  @Input() title: string;
 
   progress: number;
 
-  constructor() {}
+  constructor(private elementRef: ElementRef) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.title) {
+      this.elementRef.nativeElement.classList.add('titled');
+    }
+  }
 
   delete(progress) {
     this.progress = progress;
-    if (progress >= 110) {
+    console.log(progress);
+
+    if (this.progress === 100) {
       this.deleted.emit(true);
-      this.progress = 0;
     }
   }
 }

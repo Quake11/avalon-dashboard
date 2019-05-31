@@ -18,7 +18,9 @@ export class SlidesService {
   collection = 'slides';
 
   add(slide: {}): Promise<any> {
-    return this.afs.collection(this.collection).add(slide);
+    return this.afs
+      .collection(this.collection)
+      .add({ ...slide, visible: true });
   }
 
   get(id: string): Observable<any> {
@@ -39,6 +41,7 @@ export class SlidesService {
             const id = a.payload.doc.id;
             return { id, ...data };
           });
+          // .filter(slide => !slide.visible);
         })
       );
   }

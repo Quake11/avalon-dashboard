@@ -1,17 +1,8 @@
-<button
-  mat-icon-button
-  appHoldable
-  (holdTime)="delete($event)"
-  class="delete"
-  matTooltip="Удерживайте кнопку для удаления"
-  matTooltipPosition="above"
-  matTooltipShowDelay="50"
->
-  <mat-progress-spinner
-    diameter="75"
-    color="warn"
-    [value]="progress"
-    mode="determinate"
-  ></mat-progress-spinner>
+<p *ngIf="title" matTooltip="Удерживайте иконку корзины для удаления" matTooltipPosition="above">
+  {{ title }}
+</p>
+<button mat-icon-button type="button" appHoldable (holdTime)="delete($event)" class="delete"
+  matTooltip="Удерживайте для удаления" matTooltipPosition="above" matTooltipShowDelay="50">
+  <mat-progress-spinner diameter="75" color="warn" [value]="progress" mode="determinate"></mat-progress-spinner>
   <mat-icon color="warn">delete</mat-icon>
 </button>

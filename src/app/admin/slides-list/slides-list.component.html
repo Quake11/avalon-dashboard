@@ -5,42 +5,20 @@
     <span *ngIf="saved === false" style="color: red">Идёт сохранение...</span>
   </div>
 
-  <div
-    cdkDropList
-    class="example-list"
-    (cdkDropListDropped)="drop($event)"
-    *ngIf="list"
-  >
-    <app-slide
-      class="example-box"
-      *ngFor="let slide of sortBy('sort'); trackBy: trackByFn"
-      cdkDrag
-      [slide]="slide"
-      @delete
-    >
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" *ngIf="list">
+    <app-slide class="example-box" *ngFor="let slide of sortBy('sort'); trackBy: trackByFn" cdkDrag [slide]="slide"
+      @delete>
       <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
 
-      <mat-icon
-        *ngIf="list.length > 1"
-        cdkDragHandle
-        matTooltip="Перетащите для сортировки"
-        matTooltipPosition="above"
-        class="handle"
-        >drag_handle</mat-icon
-      >
+      <mat-icon *ngIf="list.length > 1" cdkDragHandle matTooltip="Перетащите для сортировки" matTooltipPosition="above"
+        class="handle">drag_handle</mat-icon>
 
       <ng-container [ngSwitch]="slide.type">
         <ng-template [ngSwitchCase]="'image'">
           <img *cdkDragPreview [src]="slide.downloadURL" [alt]="slide.name" />
         </ng-template>
         <ng-template [ngSwitchCase]="'video'">
-          <video
-            *cdkDragPreview
-            [src]="slide.downloadURL"
-            loop
-            autoplay
-            [muted]="true"
-          ></video>
+          <video *cdkDragPreview [src]="slide.downloadURL" loop autoplay [muted]="true"></video>
         </ng-template>
       </ng-container>
     </app-slide>

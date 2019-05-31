@@ -36,4 +36,12 @@ export class SlideComponent implements OnInit {
       })
     );
   }
+
+  visibilityChange(visible: boolean) {
+    this.slides.update(this.slide.id, { visible }).then(() =>
+      this.snackBar.open('Сохранено', '', {
+        duration: 1500
+      })
+    );
+  }
 }

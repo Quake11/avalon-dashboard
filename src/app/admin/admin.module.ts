@@ -1,3 +1,4 @@
+import { VisibilityButtonComponent } from './../shared/visibility-button/visibility-button.component';
 import { UploadTaskComponent } from './uploader/upload-task/upload-task.component';
 import { UploaderComponent } from './uploader/uploader.component';
 import { AdminComponent } from './admin.component';
@@ -45,7 +46,8 @@ const routes: Routes = [
     ProgressBarComponent,
     UploadTaskComponent,
     HoldableDeleteComponent,
-    SafePipe
+    SafePipe,
+    VisibilityButtonComponent
   ],
   imports: [
     CommonModule,

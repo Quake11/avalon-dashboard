@@ -1,0 +1,15 @@
+<ng-container *ngIf="visible === false; then hiddenTemplate; else visibleTemplate">
+</ng-container>
+
+<ng-template #visibleTemplate>
+  <mat-icon [color]="wantHide ? null : 'primary'" (click)="toggle()" matTooltip="Скрыть" matTooltipPosition="above"
+    (mouseover)="wantHide = true" (mouseleave)="wantHide = false">
+    {{ wantHide ? 'visibility_off' : 'visibility' }}
+  </mat-icon>
+</ng-template>
+
+<ng-template #hiddenTemplate>
+  <mat-icon [color]="wantShow ? 'primary' : null" (click)="toggle()" matTooltip="Показать" matTooltipPosition="above"
+    (mouseover)="wantShow = true" (mouseleave)="wantShow = false">
+    {{ wantShow ? 'visibility' : 'visibility_off' }}</mat-icon>
+</ng-template>
