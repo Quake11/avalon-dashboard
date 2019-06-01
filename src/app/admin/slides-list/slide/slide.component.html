@@ -1,7 +1,7 @@
 <ng-content></ng-content>
-<span class="name" [matTooltip]="slide.name" matTooltipPosition="above">{{
-  slide.name
-}}</span>
+<span class="name" [matTooltip]="slide.name" matTooltipPosition="above" [style.opacity]="slide.visible ? 1 : 0.3">
+  {{ slide.name }}
+</span>
 
 <mat-chip-list>
   <mat-chip color="primary" selected *ngIf="slide.fullscreen" (removed)="fullscreenChange(false)">
