@@ -11,17 +11,15 @@ import { SlidesListComponent } from './slides-list/slides-list.component';
 import { ProgressBarComponent } from './uploader/progress-bar/progress-bar.component';
 import { LoggedInGuard } from 'ngx-auth-firebaseui';
 import { AdminGuard } from '../guards/admin.guard';
-import {
-  MatIconModule,
-  MatSliderModule,
-  MatTooltipModule,
-  MatMenuModule,
-  MatProgressSpinnerModule,
-  MatCheckboxModule,
-  MatSnackBarModule,
-  MatChipsModule,
-  MatButtonModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HoldableDeleteComponent } from '../shared/holdable-delete/holdable-delete.component';
 import { SafePipe } from '../pipes/safe.pipe';

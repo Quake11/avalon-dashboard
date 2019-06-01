@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { SliderComponent } from './slider/slider.component';
 import { InfoComponent } from './info/info.component';
 import { RouterModule, Routes } from '@angular/router';
-import { MatIconModule } from '@angular/material';
+import { MatIconModule } from '@angular/material/icon';
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 
