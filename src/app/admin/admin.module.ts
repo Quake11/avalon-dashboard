@@ -24,6 +24,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { HoldableDeleteComponent } from '../shared/holdable-delete/holdable-delete.component';
 import { SafePipe } from '../pipes/safe.pipe';
 import { DirectivesModule } from '../directives/directives.module';
+import { ForegroundListComponent } from './foreground-list/foreground-list.component';
+import { ForegroundItemComponent } from './foreground-list/foreground-item/foreground-item.component';
 
 const routes: Routes = [
   {
@@ -45,7 +47,9 @@ const routes: Routes = [
     UploadTaskComponent,
     HoldableDeleteComponent,
     SafePipe,
-    VisibilityButtonComponent
+    VisibilityButtonComponent,
+    ForegroundListComponent,
+    ForegroundItemComponent
   ],
   imports: [
     CommonModule,
