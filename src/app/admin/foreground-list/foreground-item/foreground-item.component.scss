@@ -1,0 +1,20 @@
+img,
+video {
+  max-height: 300px;
+}
+
+.name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  flex: 1;
+  margin: 15px;
+}
+
+app-visibility-button {
+  margin: 10px;
+}
+
+app-holdable-delete {
+  margin: 10px;
+}

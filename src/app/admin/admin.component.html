@@ -7,10 +7,20 @@
   </button>
 </div>
 
-<app-uploader></app-uploader>
+<div class="uploaders">
+  <app-uploader [maxSizeKb]="5000" [title]="'Загрузить слайд'" storageFolder="testSlides" fileType="image"
+    (done)="onUploadSlideDone($event)" multiple="true"></app-uploader>
+  <app-uploader [maxSizeKb]="5000" [title]="'Загрузить анимацию'" storageFolder="testForegrounds" fileType="image"
+    (done)="onUploadForegroundDone($event)" multiple="true"></app-uploader>
+</div>
+
 
 <div class="settings">
-  <app-slides-list></app-slides-list>
-
-  <app-slides-interval></app-slides-interval>
+  <div class="column">
+    <app-slides-interval></app-slides-interval>
+    <app-slides-list></app-slides-list>
+  </div>
+  <div class="column">
+    <app-foreground-list></app-foreground-list>
+  </div>
 </div>

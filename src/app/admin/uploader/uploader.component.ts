@@ -1,7 +1,10 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
 import {
   trigger,
@@ -61,30 +64,87 @@ import {
   ]
 })
 export class UploaderComponent {
+  @Input() title!: string;
+  @Input() storageFolder!: string;
+  @Input() multiple: boolean;
+  @Input() fileType: string;
+  @Input() maxSizeKb: number;
+
+  @Output() done = new EventEmitter<{
+    url: string;
+    path: string;
+    name: string;
+    type: string;
+  }>();
+  @Output() delete = new EventEmitter();
+
   isHovering: boolean;
 
   files: File[] = [];
+  file: File;
 
-  constructor(private ref: ChangeDetectorRef) { }
+  constructor(private ref: ChangeDetectorRef) {}
 
   toggleHover(event: boolean) {
     this.isHovering = event;
   }
 
-  onUpload(files: FileList) {
+  onDrop(files: FileList) {
     console.log(files);
 
-    for (let i = 0; i < files.length; i++) {
-      const item = files.item(i);
-      if (item.size === 0) {
-        console.log(`File '${item.name}' has no size`);
+    if (!files) {
+      return;
+    }
 
-        continue;
+    if (!this.multiple) {
+      const newFile = files[0];
+      console.log(newFile.size / 1024, this.maxSizeKb);
+
+      if (this.maxSizeKb && newFile.size / 1024 > this.maxSizeKb) {
+        console.error('File is too big! :(');
+        return;
       }
 
-      this.files.push(item);
+      if (this.fileType && newFile.type.split('/')[0] !== this.fileType) {
+        console.log('Unsupported file type :( ', newFile.type);
+        return;
+      }
+      this.file = null;
       this.ref.detectChanges();
+      this.file = newFile;
+    } else {
+      for (let i = 0; i < files.length; i++) {
+        const item = files.item(i);
+        if (item.size === 0) {
+          console.log(`File '${item.name}' has no size`);
+          continue;
+        }
+
+        if (this.maxSizeKb && item.size / 1024 > this.maxSizeKb) {
+          console.error('File is too big! :(');
+          return;
+        }
+
+        console.log(item.size / 1024, this.maxSizeKb);
+
+        if (this.fileType && item.type.split('/')[0] !== this.fileType) {
+          console.log('unsupported file type :( ', item.type);
+          return;
+        }
+        this.files.push(item);
+      }
     }
+    this.ref.detectChanges();
+  }
+
+  onUploadDone($event) {
+    this.done.emit({ type: this.fileType, ...$event });
+  }
+
+  onDeleteFile() {
+    this.file = null;
+    this.ref.detectChanges();
+    this.delete.emit();
   }
 
   deleteItem(index: number) {

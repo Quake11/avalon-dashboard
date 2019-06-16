@@ -1,6 +1,6 @@
 .wrapper {
-  width: 300px;
-  height: 250px;
+  width: 200px;
+  height: 150px;
   position: relative;
   border-radius: 2px;
   text-align: center;
@@ -54,7 +54,7 @@
       display: flex;
       justify-content: space-around;
 
-      >* {
+      > * {
         margin: 15px;
       }
 

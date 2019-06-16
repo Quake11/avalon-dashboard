@@ -9,6 +9,12 @@ service cloud.firestore {
         allow write: if isAdmin();
     }
 
+    match /foregrounds/{foreground} {
+        allow read;
+        allow write: if isAdmin();
+    }
+
+
     match /meta/{meta} {
         allow read;
         allow write: if isAdmin();

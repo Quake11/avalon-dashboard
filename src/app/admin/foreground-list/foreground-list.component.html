@@ -1,3 +1,26 @@
-<p>
-  foreground-list works!
-</p>
+<ng-container *ngIf="list?.length > 0">
+  <div class="header">
+    <h3>Передний план (анимации)</h3>
+    <span *ngIf="saved === true" style="color: green">Сохранено</span>
+    <span *ngIf="saved === false" style="color: red">Идёт сохранение...</span>
+  </div>
+
+  <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)" *ngIf="list">
+    <app-foreground-item class="example-box" *ngFor="let foreground of sortBy('sort'); trackBy: trackByFn" cdkDrag
+      [foreground]="foreground" @delete>
+      <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+
+      <mat-icon *ngIf="list.length > 1" cdkDragHandle matTooltip="Перетащите для сортировки" matTooltipPosition="above"
+        class="handle">drag_handle</mat-icon>
+
+      <ng-container [ngSwitch]="foreground.type">
+        <ng-template [ngSwitchCase]="'image'">
+          <img *cdkDragPreview [src]="foreground.downloadURL" [alt]="foreground.name" />
+        </ng-template>
+        <ng-template [ngSwitchCase]="'video'">
+          <video *cdkDragPreview [src]="foreground.downloadURL" loop autoplay [muted]="true"></video>
+        </ng-template>
+      </ng-container>
+    </app-foreground-item>
+  </div>
+</ng-container>

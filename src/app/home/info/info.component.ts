@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { WeatherService } from '../../services/weather/weather.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -7,7 +12,8 @@ import { CurrencyService } from '../../services/currency/currency.service';
 @Component({
   selector: 'app-info',
   templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  styleUrls: ['./info.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InfoComponent implements OnInit {
   currentTemp$: Observable<{}>;

@@ -1,13 +1,24 @@
-<input hidden type="file" multiple #uploader (change)="onUpload($event.target.files)" />
-<div class="dropzone" appDropzone (hovered)="toggleHover($event)" (dropped)="onUpload($event)"
-  (click)="uploader.click()" [class.hovering]="isHovering">
-  <h2>Перетащите сюда файлы или кликните для выбора файлов.</h2>
+<input hidden type="file" accept="image/*" [attr.multiple]="multiple" #uploader
+  (change)="onDrop($event.target.files)" />
+<div class="dropzone" appDropzone (hovered)="toggleHover($event)" (dropped)="onDrop($event)" (click)="uploader.click()"
+  [class.hovering]="isHovering">
+  <h2>{{ title }}</h2>
+  <h4 *ngIf="multiple">
+    Перетащите сюда файлы или кликните для выбора файлов.
+  </h4>
+  <h4 *ngIf="!multiple">Перетащите сюда файл или кликните для выбора файла.</h4>
 </div>
 
-<div class="uploads" *ngIf="files.length > 0" @fadeIn>
+<div class="uploads" *ngIf="multiple && files.length > 0" @fadeIn>
   <h3>Загрузки</h3>
   <div class="tasks" [@list]="files.length">
-    <app-upload-task *ngFor="let file of files;let i = index" [file]="file" [index]="i"
-      (deleteEvent)="deleteItem($event)"></app-upload-task>
+    <app-upload-task *ngFor="let file of files; let i = index" [file]="file" [storageFolder]="storageFolder"
+      (delete)="onDeleteFile()" (done)="onUploadDone($event)">
+    </app-upload-task>
   </div>
+</div>
+
+<div class="uploads" *ngIf="!multiple && file" @fadeIn>
+  <app-upload-task [file]="file" [storageFolder]="storageFolder" (delete)="onDeleteFile()"
+    (done)="onUploadDone($event)"></app-upload-task>
 </div>

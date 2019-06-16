@@ -4,39 +4,39 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 import { map } from 'rxjs/operators';
-import { Slide } from 'src/app/interfaces/slide';
+import { Foreground } from 'src/app/interfaces/foreground';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SlidesService {
+export class ForegroundsService {
   constructor(
     private storage: AngularFireStorage,
     private afs: AngularFirestore
   ) {}
 
-  collection = 'slides';
+  collection = 'foregrounds';
 
-  add(slide: {}): Promise<any> {
+  add(foreground: {}): Promise<any> {
     return this.afs
       .collection(this.collection)
-      .add({ ...slide, visible: true });
+      .add({ ...foreground, visible: true });
   }
 
-  get(id: string): Observable<Slide> {
+  get(id: string): Observable<Foreground> {
     return this.afs
-      .collection<Slide>(this.collection)
+      .collection<Foreground>(this.collection)
       .doc(id)
       .snapshotChanges();
   }
 
-  getAll(): Observable<Slide[]> {
+  getAll(): Observable<Foreground[]> {
     return this.afs
-      .collection<Slide>(this.collection)
+      .collection<Foreground>(this.collection)
       .snapshotChanges()
       .pipe(
-        map(slides => {
-          return slides.map(a => {
+        map(foregrounds => {
+          return foregrounds.map(a => {
             const data = a.payload.doc.data();
             const id = a.payload.doc.id;
             return { id, ...data };
@@ -48,14 +48,14 @@ export class SlidesService {
 
   update(id: string, data: {}): Promise<any> {
     return this.afs
-      .collection<Slide>(this.collection)
+      .collection<Foreground>(this.collection)
       .doc(id)
       .update(data);
   }
 
   delete(id: string, pathStorage: string): Promise<any> {
     const deleteFromDb = this.afs
-      .collection<Slide>(this.collection)
+      .collection<Foreground>(this.collection)
       .doc(id)
       .delete();
     const deleteFromStorage = this.storage

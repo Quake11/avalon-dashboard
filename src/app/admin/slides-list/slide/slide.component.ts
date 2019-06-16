@@ -27,6 +27,10 @@ export class SlideComponent implements OnInit {
         duration: 1500
       })
     );
+
+    if (!checked) {
+      this.hidetimeChange(false);
+    }
   }
 
   hidetimeChange(checked: boolean) {

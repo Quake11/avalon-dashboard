@@ -17,4 +17,20 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+  }
+}
+
+.uploaders {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  app-uploader {
+    margin: 15px;
+  }
 }

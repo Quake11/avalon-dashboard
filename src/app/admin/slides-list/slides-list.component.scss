@@ -1,5 +1,4 @@
 :host {
-  margin: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,8 +17,8 @@
 }
 
 .example-list {
-  width: 500px;
-  max-width: 100%;
+  width: 450px;
+  max-width: 90vw;
   border: solid 1px #ccc;
   min-height: 60px;
   display: block;
@@ -29,7 +28,6 @@
 }
 
 .example-box {
-  padding: 15px 5px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;

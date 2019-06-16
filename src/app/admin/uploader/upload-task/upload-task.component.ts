@@ -22,10 +22,15 @@ import { SlidesService } from 'src/app/services/slides/slides.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UploadTaskComponent implements OnInit {
-  @Output() deleteEvent: EventEmitter<number> = new EventEmitter();
+  @Output() done = new EventEmitter<{
+    url: string;
+    path: string;
+    name: string;
+  }>();
+  @Output() delete: EventEmitter<number> = new EventEmitter();
 
-  @Input() file: File;
-  @Input() index: number;
+  @Input() file!: File;
+  @Input() storageFolder!: string;
 
   id: string;
 
@@ -50,7 +55,7 @@ export class UploadTaskComponent implements OnInit {
   // percentage: Observable<number>;
   percent = 0;
   snapshot: Observable<any>;
-  downloadURL: Promise<string>;
+  downloadURL: string;
 
   pathDb: string;
   pathStorage: string;
@@ -60,12 +65,13 @@ export class UploadTaskComponent implements OnInit {
   uploadedFileSub: Subscription;
 
   constructor(
-    private storage: AngularFireStorage,
     private ref: ChangeDetectorRef,
-    private slides: SlidesService
+    private storage: AngularFireStorage
   ) {}
 
   ngOnInit() {
+    console.log('task init');
+
     this.startUpload();
     this.readLocalUrl();
     this.isImage = this.file.type.includes('image');
@@ -99,16 +105,19 @@ export class UploadTaskComponent implements OnInit {
 
     reader.onload = () => {
       this.localUrl = reader.result;
-      this.ref.detectChanges();
+      this.ref.markForCheck();
     };
     reader.readAsDataURL(this.file);
   }
 
   startUpload() {
+    console.log('startUpload');
+
     const name = this.file.name;
 
     // The storage path
-    this.pathStorage = `slides/${Date.now()}_${name}`;
+    this.pathStorage = `${this.storageFolder}/${Date.now()}_${name}`;
+    console.log(this.pathStorage);
 
     // Reference to storage bucket
     const ref = this.storage.ref(this.pathStorage);
@@ -128,28 +137,17 @@ export class UploadTaskComponent implements OnInit {
       }),
       // The file's download URL
       finalize(async () => {
-        this.downloadURL = ref.getDownloadURL().toPromise();
+        console.log('finalize');
+
+        this.downloadURL = await ref.getDownloadURL().toPromise();
+        console.log(this.downloadURL);
+
+        this.done.emit({
+          url: this.downloadURL,
+          path: this.pathStorage,
+          name
+        });
         // console.log(this.downloadURL);
-
-        this.slides
-          .add({
-            downloadURL: await this.downloadURL,
-            path: this.pathStorage,
-            name,
-            type: this.type || null,
-            sort: 0
-          })
-          .then(result => {
-            this.id = result.id;
-            this.pathDb = result.path;
-
-            this.slides.get(this.id).subscribe(data => {
-              console.log(data);
-              if (!data.payload.exists) {
-                this.delete(true);
-              }
-            });
-          });
       })
     );
   }
@@ -169,10 +167,12 @@ export class UploadTaskComponent implements OnInit {
     return this.percent < 100;
   }
 
-  delete(isDeleted: boolean) {
-    if (isDeleted) {
-      this.slides.delete(this.id, this.pathStorage);
-      this.deleteEvent.emit(this.index);
+  onDelete(deleting: boolean) {
+    console.log('delete');
+
+    if (deleting) {
+      this.storage.ref(this.pathStorage).delete();
+      this.delete.emit();
     }
   }
 }

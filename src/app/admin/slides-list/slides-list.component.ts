@@ -1,7 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  OnDestroy
+} from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Observable } from 'rxjs';
-
+import { Observable, Subscription } from 'rxjs';
+import { SlidesService } from 'src/app/services/slides/slides.service';
+import { Slide } from 'src/app/interfaces/slide';
 import {
   trigger,
   transition,
@@ -9,12 +16,12 @@ import {
   style,
   sequence
 } from '@angular/animations';
-import { SlidesService } from 'src/app/services/slides/slides.service';
 
 @Component({
   selector: 'app-slides-list',
   templateUrl: './slides-list.component.html',
   styleUrls: ['./slides-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('delete', [
       transition('* => void', [
@@ -38,9 +45,10 @@ import { SlidesService } from 'src/app/services/slides/slides.service';
     ])
   ]
 })
-export class SlidesListComponent implements OnInit {
-  list$: Observable<any>;
-  list: Array<any>;
+export class SlidesListComponent implements OnInit, OnDestroy {
+  list$: Observable<Slide[]>;
+  list: Slide[];
+  listSub: Subscription;
 
   saved: boolean;
 
@@ -49,30 +57,48 @@ export class SlidesListComponent implements OnInit {
   ngOnInit() {
     this.list$ = this.slides.getAll();
 
-    this.list$.subscribe(value => {
+    this.listSub = this.list$.subscribe(value => {
       this.list = value;
       this.ref.markForCheck();
     });
+  }
+
+  ngOnDestroy() {
+    if (this.listSub) {
+      this.listSub.unsubscribe();
+    }
   }
 
   drop(event: CdkDragDrop<{ title: string; poster: string }[]>) {
     if (event.currentIndex === event.previousIndex) {
       return;
     }
-
     this.saved = false;
+
+    const originalArray = [...this.list];
     moveItemInArray(this.list, event.previousIndex, event.currentIndex);
+    const newArray = [...this.list];
 
     const updates: Array<Promise<any>> = [];
 
-    for (let i = 0; i < this.list.length; i++) {
-      this.list[i].sort = i;
-      updates.push(
-        this.slides.update(this.list[i].id, { sort: this.list[i].sort })
-      );
+    // save only slides that changed order
+    for (let i = 0; i < originalArray.length; i++) {
+      const originalElement = originalArray[i];
+      const newElement = newArray[i];
+
+      if (originalElement.id !== newElement.id) {
+        this.list[i].sort = i;
+        updates.push(
+          this.slides.update(this.list[i].id, {
+            sort: this.list[i].sort
+          })
+        );
+      }
     }
 
     Promise.all(updates).then(() => {
+      console.log('saved slides order');
+
       this.saved = true;
       this.ref.markForCheck();
     });

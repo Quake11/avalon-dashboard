@@ -1,4 +1,4 @@
-export interface Slide {
+export interface Foreground {
   id?: string;
   name?: string;
   path?: string;

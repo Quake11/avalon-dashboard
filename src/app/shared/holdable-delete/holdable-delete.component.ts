@@ -28,8 +28,6 @@ export class HoldableDeleteComponent implements OnInit {
 
   delete(progress) {
     this.progress = progress;
-    console.log(progress);
-
     if (this.progress === 100) {
       this.deleted.emit(true);
     }

@@ -3,7 +3,8 @@ import {
   OnInit,
   Input,
   ChangeDetectorRef,
-  OnDestroy
+  OnDestroy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Slide } from '../../interfaces/slide';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -14,7 +15,8 @@ import { Settings } from '../../interfaces/settings';
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
-  styleUrls: ['./slider.component.scss']
+  styleUrls: ['./slider.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SliderComponent implements OnInit, OnDestroy {
   @Input() slides: Array<Slide>;
