@@ -6,10 +6,11 @@
     }" class="slide">
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
-        <img [src]="slide.downloadURL" [alt]="slide.name" />
+        <img [src]="(currentSlide === i || currentSlide + 1 === i) ? slide.downloadURL : ''" [alt]="slide.name" />
       </ng-template>
       <ng-template [ngSwitchCase]="'video'">
-        <video [src]="slide.downloadURL" loop autoplay [muted]="true"></video>
+        <video [src]="(currentSlide === i || currentSlide + 1 === i) ? slide.downloadURL : ''" loop autoplay
+          [muted]="true"></video>
       </ng-template>
     </ng-container>
   </div>
