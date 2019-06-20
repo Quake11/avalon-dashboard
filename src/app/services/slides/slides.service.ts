@@ -3,8 +3,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { Slide } from 'src/app/interfaces/slide';
+import { Settings } from 'src/app/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,15 @@ export class SlidesService {
   ) {}
 
   collection = 'slides';
+
+  slidesInterval$ = this.afs
+    .collection('meta')
+    .doc<Settings>('settings')
+    .valueChanges()
+    .pipe(
+      filter(settings => !!settings),
+      map(settings => settings.slidesInterval)
+    );
 
   add(slide: {}): Promise<any> {
     return this.afs
@@ -44,6 +54,14 @@ export class SlidesService {
           // .filter(slide => !slide.visible);
         })
       );
+  }
+
+  getAllVisible(): Observable<Slide[]> {
+    return this.getAll().pipe(
+      map(slides => {
+        return slides.filter(s => s.visible);
+      })
+    );
   }
 
   update(id: string, data: {}): Promise<any> {

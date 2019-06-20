@@ -1,4 +1,9 @@
-<app-slider [slides]="slides$ | async" [foregrounds]="foregrounds$ | async"></app-slider>
+<ng-container *ngIf="slides$ | async as slides">
+  <ng-container *ngIf="foregrounds$ | async as foregrounds">
+    <app-slider [slides]="slides" [foregrounds]="foregrounds"></app-slider>
+  </ng-container>
+</ng-container>
+
 <app-info></app-info>
 
 <!-- <div class="foreground" [style.background-image]="'url(/assets/mini_smile.webp)'"></div>

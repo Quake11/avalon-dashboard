@@ -1,13 +1,6 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { WeatherService } from '../../services/weather/weather.service';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { CurrencyService } from '../../services/currency/currency.service';
+import { WeatherService, CurrencyService } from '../../services';
 
 @Component({
   selector: 'app-info',
@@ -22,8 +15,6 @@ export class InfoComponent implements OnInit {
   currency$: Observable<{}>;
 
   constructor(
-    private afs: AngularFirestore,
-    private ref: ChangeDetectorRef,
     private weather: WeatherService,
     private currency: CurrencyService
   ) {}

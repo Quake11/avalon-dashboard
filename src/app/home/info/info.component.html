@@ -5,9 +5,7 @@
         <h2>Сегодня / Today</h2>
         <div class="now">
           <h4>Сейчас / Now</h4>
-          <span class="value"
-            >{{ temp.value }} <span class="celsium">°C</span></span
-          >
+          <span class="value">{{ temp.value }} <span class="celsium">°C</span></span>
           <img [src]="temp.icon" class="icon" />
         </div>
 
@@ -18,9 +16,7 @@
           <h4 *ngIf="forecast.nearest.type === 'evening'">
             Вечером / Evening
           </h4>
-          <span class="value"
-            >{{ forecast.nearest.value }} <span class="celsium">°C</span></span
-          >
+          <span class="value">{{ forecast.nearest.value }} <span class="celsium">°C</span></span>
           <img [src]="forecast.nearest.icon" class="icon" />
         </div>
       </div>
@@ -29,19 +25,15 @@
         <h2>Завтра / Tomorrow</h2>
         <div class="morning">
           <h4>Утром / Morning</h4>
-          <span class="value"
-            >{{ forecast.tomorrow.morning.value }}
-            <span class="celsium">°C</span></span
-          >
+          <span class="value">{{ forecast.tomorrow.morning.value }}
+            <span class="celsium">°C</span></span>
           <img [src]="forecast.tomorrow.morning.icon" class="icon" />
         </div>
 
         <div class="evening">
           <h4>Вечером / Evening</h4>
-          <span class="value"
-            >{{ forecast.tomorrow.evening.value }}
-            <span class="celsium">°C</span></span
-          >
+          <span class="value">{{ forecast.tomorrow.evening.value }}
+            <span class="celsium">°C</span></span>
           <img [src]="forecast.tomorrow.evening.icon" class="icon" />
         </div>
       </div>

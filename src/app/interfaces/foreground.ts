@@ -8,4 +8,7 @@ export interface Foreground {
   fullscreen?: boolean;
   hidetime?: boolean; // should or shouldn't hide time block when slide active
   visible?: boolean;
+  scale?: number;
+  x?: number;
+  y?: number;
 }

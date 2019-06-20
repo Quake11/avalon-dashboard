@@ -1,5 +1,4 @@
-import { SlidesService } from 'src/app/services/slides/slides.service';
-import { ForegroundsService } from 'src/app/services/foregrounds/foregrounds.service';
+import { SlidesService, ForegroundsService } from 'src/app/services';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
@@ -8,9 +7,17 @@ import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss'],
+  styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  get foregrounds$() {
+    return this.foregrounds.getAllVisible();
+  }
+
+  get slides$() {
+    return this.slides.getAllVisible();
+  }
+
   constructor(
     private auth: AngularFireAuth,
     private router: Router,
@@ -38,7 +45,7 @@ export class AdminComponent implements OnInit {
       path,
       name,
       type,
-      sort: 0,
+      sort: 0
     });
   }
 
@@ -49,7 +56,7 @@ export class AdminComponent implements OnInit {
       path: upload.path,
       name: upload.name,
       type: upload.type,
-      sort: 0,
+      sort: 0
     });
   }
 
@@ -57,7 +64,7 @@ export class AdminComponent implements OnInit {
     console.log(err);
 
     this.snackBar.open(err, '', {
-      duration: 5000,
+      duration: 5000
     });
   }
 }

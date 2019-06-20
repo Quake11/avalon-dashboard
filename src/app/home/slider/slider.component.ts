@@ -1,95 +1,71 @@
+import { ForegroundsService, SlidesService } from 'src/app/services';
 import {
   Component,
   OnInit,
   Input,
   ChangeDetectorRef,
   OnDestroy,
-  ChangeDetectionStrategy,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Slide } from '../../interfaces/slide';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable, Subscription, interval } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Settings } from '../../interfaces/settings';
+import { Observable, Subscription, interval, Subject } from 'rxjs';
 import { Foreground } from 'src/app/interfaces/foreground';
+import { getFormattedDates } from 'src/app/utils/date';
+import { debounceTime } from 'rxjs/operators';
+import { CdkDragMove } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SliderComponent implements OnInit, OnDestroy {
   @Input() slides: Array<Slide>;
   @Input() foregrounds: Array<Foreground>;
 
+  get slidesSorted() {
+    return this.slides.sort((a, b) =>
+      a.sort > b.sort ? 1 : a.sort === b.sort ? 0 : -1
+    );
+  }
+
+  get foregroundsSorted() {
+    return this.foregrounds.sort((a, b) =>
+      a.sort > b.sort ? 1 : a.sort === b.sort ? 0 : -1
+    );
+  }
+
+  currentDraggedForeground: Foreground;
+
+  private scrolledSubject: Subject<WheelEvent> = new Subject<WheelEvent>();
+  private dragMovedSubject: Subject<{
+    event: CdkDragMove;
+    id: string;
+  }> = new Subject<{
+    event: CdkDragMove;
+    id: string;
+  }>();
+
   autoPlaySub: Subscription;
 
-  slidesInterval: number;
   slidesInterval$: Observable<number>;
   currentSlide = 0;
 
   datetimeSub: Subscription;
-  dateRU: string;
-  dateENG: string;
+
   time: string;
+  dateENG: string;
+  dateRU: string;
 
-  daysOfWeek = {
-    ru: [
-      'Воскресенье',
-      'Понедельник',
-      'Вторник',
-      'Среда',
-      'Четверг',
-      'Пятница',
-      'Суббота',
-    ],
-    eng: ['Sun', 'Mon', 'Tues', 'Wed', 'thurs', 'Fri', 'Sat'],
-  };
-
-  months = {
-    ru: [
-      'Января',
-      'Февраля',
-      'Марта',
-      'Апреля',
-      'Мая',
-      'Июня',
-      'Июля',
-      'Августа',
-      'Сентября',
-      'Ноября',
-      'Декабря',
-    ],
-    eng: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
-  };
-
-  constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) {}
+  constructor(
+    private ref: ChangeDetectorRef,
+    private slidesService: SlidesService,
+    private foregroundsService: ForegroundsService
+  ) {}
 
   ngOnInit() {
-    this.slidesInterval$ = this.afs
-      .collection('meta')
-      .doc<Settings>('settings')
-      .valueChanges()
-      .pipe(
-        filter(settings => !!settings),
-        map(settings => settings.slidesInterval)
-      );
-    this.slidesInterval$.subscribe(i => {
-      this.slidesInterval = i;
+    this.slidesService.slidesInterval$.subscribe(i => {
       this.autoPlay(i);
     });
 
@@ -97,7 +73,27 @@ export class SliderComponent implements OnInit, OnDestroy {
       this.setDate();
     });
 
+    console.log(this.slides);
     console.log(this.foregrounds);
+
+    this.scrolledSubject.subscribe(scrollEvent => {
+      const { deltaY } = scrollEvent;
+      let deltaScale = 0;
+      if (deltaY > 0) {
+        console.log('reduce');
+        deltaScale = -0.05;
+      } else {
+        console.log('increase');
+        deltaScale = +0.05;
+      }
+      this.updateScale(deltaScale);
+    });
+
+    this.dragMovedSubject.pipe(debounceTime(500)).subscribe(subj => {
+      const { x, y } = subj.event.distance;
+      this.updatePosition(subj.id, x, y);
+      console.log(subj.event.distance);
+    });
   }
 
   ngOnDestroy() {
@@ -108,29 +104,10 @@ export class SliderComponent implements OnInit, OnDestroy {
   }
 
   setDate() {
-    const dateRef = new Date();
-
-    const dayOfWeekRU = this.daysOfWeek.ru[dateRef.getDay()];
-    const dayOfWeekENG = this.daysOfWeek.eng[dateRef.getDay()];
-    const day = dateRef.getDate().toString();
-    const year = dateRef.getFullYear().toString();
-    const monthRU = this.months.ru[dateRef.getMonth()];
-    const monthENG = this.months.eng[dateRef.getMonth()];
-
-    let hours: string = dateRef.getHours().toString();
-    if (dateRef.getHours() < 10) {
-      hours = '0' + hours.toString();
-    }
-
-    let minutes: string = dateRef.getMinutes().toString();
-    if (dateRef.getMinutes() < 10) {
-      minutes = '0' + minutes.toString();
-    }
-
-    this.time = `${hours}:${minutes}`;
-    this.dateRU = `${dayOfWeekRU}, ${day} ${monthRU} ${year} года`;
-    this.dateENG = `${dayOfWeekENG}, the ${day} of ${monthENG}, ${year}`;
-
+    const { time, dateENG, dateRU } = getFormattedDates();
+    this.time = time;
+    this.dateENG = dateENG;
+    this.dateRU = dateRU;
     this.ref.markForCheck();
   }
 
@@ -152,13 +129,41 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.ref.markForCheck();
   }
 
-  sortSlides(prop: string) {
-    return this.slides
-      .filter(slide => slide.type === 'video' || slide.type === 'image')
-      .sort((a, b) => (a[prop] > b[prop] ? 1 : a[prop] === b[prop] ? 0 : -1));
-  }
-
   trackByFn(index, slide) {
     return slide.id;
+  }
+
+  dragStarted(id: string) {
+    this.currentDraggedForeground = this.foregrounds.find(f => f.id === id);
+  }
+
+  dragEnded(event) {
+    console.log(event);
+
+    this.currentDraggedForeground = null;
+  }
+
+  updatePosition(id: string, x: number, y: number) {
+    this.foregroundsService.update(id, {
+      x,
+      y
+    });
+  }
+
+  updateScale(deltaScale: number) {
+    const { id } = this.currentDraggedForeground;
+    const currentScale = this.foregrounds.find(f => f.id === id).scale || 1;
+    const newScale = currentScale + deltaScale;
+    this.foregroundsService.update(id, {
+      scale: newScale
+    });
+  }
+
+  onScroll(scroll: WheelEvent) {
+    this.scrolledSubject.next(scroll);
+  }
+
+  dragMoved(event: CdkDragMove, id) {
+    this.dragMovedSubject.next({ event, id });
   }
 }

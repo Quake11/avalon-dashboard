@@ -46,6 +46,14 @@ export class ForegroundsService {
       );
   }
 
+  getAllVisible(): Observable<Foreground[]> {
+    return this.getAll().pipe(
+      map(foregrounds => {
+        return foregrounds.filter(s => s.visible);
+      })
+    );
+  }
+
   update(id: string, data: {}): Promise<any> {
     return this.afs
       .collection<Foreground>(this.collection)

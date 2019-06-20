@@ -2,21 +2,20 @@ import { HomeComponent } from './home.component';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SliderComponent } from './slider/slider.component';
-import { InfoComponent } from './info/info.component';
 import { RouterModule, Routes } from '@angular/router';
-import { MatIconModule } from '@angular/material/icon';
+import { SliderModule } from './slider/slider.module';
+import { InfoModule } from './info/info.module';
 
 const routes: Routes = [{ path: '', component: HomeComponent }];
 
 @NgModule({
-  declarations: [HomeComponent, SliderComponent, InfoComponent],
+  declarations: [HomeComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     AngularFirestoreModule,
-    MatIconModule,
-  ],
-  exports: [HomeComponent, SliderComponent, InfoComponent],
+    SliderModule,
+    InfoModule
+  ]
 })
 export class HomeModule {}

@@ -1,40 +1,25 @@
+import { ForegroundsService, SlidesService } from 'src/app/services';
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-
-import { Slide } from '../interfaces/slide';
-import { map } from 'rxjs/operators';
-import { Foreground } from '../interfaces/foreground';
+import { Slide, Foreground } from 'src/app/interfaces/';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
-  slides$: Observable<Array<Slide>>;
-  foregrounds$: Observable<Array<Foreground>>;
+  slides$: Observable<Slide[]>;
+  foregrounds$: Observable<Foreground[]>;
 
-  constructor(private afs: AngularFirestore) {}
+  constructor(
+    private slides: SlidesService,
+    private foregrounds: ForegroundsService
+  ) {}
 
   ngOnInit() {
-    this.slides$ = this.afs
-      .collection<Slide>('slides')
-      .valueChanges()
-      .pipe(
-        map(slides => {
-          return slides.filter(s => s.visible);
-        })
-      );
-
-    this.foregrounds$ = this.afs
-      .collection<Foreground>('foregrounds')
-      .valueChanges()
-      .pipe(
-        map(foregrounds => {
-          return foregrounds.filter(f => f.visible);
-        })
-      );
+    this.slides$ = this.slides.getAllVisible();
+    this.foregrounds$ = this.foregrounds.getAllVisible();
   }
 }
