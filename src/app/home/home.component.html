@@ -1,4 +1,4 @@
-<app-slider [slides]="slides"></app-slider>
+<app-slider [slides]="slides$ | async" [foregrounds]="foregrounds$ | async"></app-slider>
 <app-info></app-info>
 
 <!-- <div class="foreground" [style.background-image]="'url(/assets/mini_smile.webp)'"></div>

@@ -31,8 +31,8 @@ const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    canActivate: [LoggedInGuard, AdminGuard]
-  }
+    canActivate: [LoggedInGuard, AdminGuard],
+  },
 ];
 
 @NgModule({
@@ -49,7 +49,7 @@ const routes: Routes = [
     SafePipe,
     VisibilityButtonComponent,
     ForegroundListComponent,
-    ForegroundItemComponent
+    ForegroundItemComponent,
   ],
   imports: [
     CommonModule,
@@ -64,8 +64,9 @@ const routes: Routes = [
     MatChipsModule,
     DragDropModule,
     MatButtonModule,
-    DirectivesModule
+    MatSnackBarModule,
+    DirectivesModule,
   ],
-  providers: [AdminGuard]
+  providers: [AdminGuard],
 })
 export class AdminModule {}

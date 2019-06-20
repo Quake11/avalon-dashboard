@@ -15,7 +15,8 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     AngularFirestoreModule,
-    MatIconModule
-  ]
+    MatIconModule,
+  ],
+  exports: [HomeComponent, SliderComponent, InfoComponent],
 })
 export class HomeModule {}

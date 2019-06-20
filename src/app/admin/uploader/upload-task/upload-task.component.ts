@@ -5,11 +5,11 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import {
   AngularFireStorage,
-  AngularFireUploadTask
+  AngularFireUploadTask,
 } from '@angular/fire/storage';
 import { Observable, Subscription } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
@@ -19,13 +19,14 @@ import { SlidesService } from 'src/app/services/slides/slides.service';
   selector: 'app-upload-task',
   templateUrl: './upload-task.component.html',
   styleUrls: ['./upload-task.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadTaskComponent implements OnInit {
   @Output() done = new EventEmitter<{
     url: string;
     path: string;
     name: string;
+    type: string;
   }>();
   @Output() delete: EventEmitter<number> = new EventEmitter();
 
@@ -145,7 +146,8 @@ export class UploadTaskComponent implements OnInit {
         this.done.emit({
           url: this.downloadURL,
           path: this.pathStorage,
-          name
+          type: this.type,
+          name,
         });
         // console.log(this.downloadURL);
       })

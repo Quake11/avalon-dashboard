@@ -1,6 +1,9 @@
 <div class="wrapper" (mouseover)="hover=true" (mouseleave)="hover=false" [class.zoomed]="zoomed">
   <img *ngIf="isImage && localUrl" [src]="localUrl | safe: 'url'" [class.loading]="isLoading">
 
+  <video *ngIf="isVideo && localUrl" autoplay loop [muted]="isMuted" [src]="localUrl | safe: 'url'"
+    [class.loading]="isLoading"></video>
+
   <div class="overlay" [hidden]="!hover">
     <div class="controls" *ngIf="(snapshot | async) as snap">
       <a download mat-icon-button *ngIf="downloadURL" [href]="downloadURL" target="_blank" matTooltip="Скачать"

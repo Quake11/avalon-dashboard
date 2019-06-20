@@ -4,27 +4,29 @@ import {
   Input,
   ChangeDetectorRef,
   OnDestroy,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { Slide } from '../../interfaces/slide';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, Subscription, interval } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Settings } from '../../interfaces/settings';
+import { Foreground } from 'src/app/interfaces/foreground';
 
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SliderComponent implements OnInit, OnDestroy {
   @Input() slides: Array<Slide>;
+  @Input() foregrounds: Array<Foreground>;
 
   autoPlaySub: Subscription;
 
-  autoPlayInterval: number;
-  autoPlayInterval$: Observable<number>;
+  slidesInterval: number;
+  slidesInterval$: Observable<number>;
   currentSlide = 0;
 
   datetimeSub: Subscription;
@@ -40,9 +42,9 @@ export class SliderComponent implements OnInit, OnDestroy {
       'Среда',
       'Четверг',
       'Пятница',
-      'Суббота'
+      'Суббота',
     ],
-    eng: ['Sun', 'Mon', 'Tues', 'Wed', 'thurs', 'Fri', 'Sat']
+    eng: ['Sun', 'Mon', 'Tues', 'Wed', 'thurs', 'Fri', 'Sat'],
   };
 
   months = {
@@ -57,7 +59,7 @@ export class SliderComponent implements OnInit, OnDestroy {
       'Августа',
       'Сентября',
       'Ноября',
-      'Декабря'
+      'Декабря',
     ],
     eng: [
       'January',
@@ -71,14 +73,14 @@ export class SliderComponent implements OnInit, OnDestroy {
       'September',
       'October',
       'November',
-      'December'
-    ]
+      'December',
+    ],
   };
 
   constructor(private afs: AngularFirestore, private ref: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.autoPlayInterval$ = this.afs
+    this.slidesInterval$ = this.afs
       .collection('meta')
       .doc<Settings>('settings')
       .valueChanges()
@@ -86,14 +88,16 @@ export class SliderComponent implements OnInit, OnDestroy {
         filter(settings => !!settings),
         map(settings => settings.slidesInterval)
       );
-    this.autoPlayInterval$.subscribe(i => {
-      this.autoPlayInterval = i;
-      this.autoPlay();
+    this.slidesInterval$.subscribe(i => {
+      this.slidesInterval = i;
+      this.autoPlay(i);
     });
 
     this.datetimeSub = interval(1000).subscribe(() => {
       this.setDate();
     });
+
+    console.log(this.foregrounds);
   }
 
   ngOnDestroy() {
@@ -130,11 +134,11 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.ref.markForCheck();
   }
 
-  autoPlay() {
+  autoPlay(i) {
     if (this.autoPlaySub) {
       this.autoPlaySub.unsubscribe();
     }
-    this.autoPlaySub = interval(this.autoPlayInterval).subscribe(() => {
+    this.autoPlaySub = interval(i).subscribe(() => {
       this.nextSlide();
     });
   }
