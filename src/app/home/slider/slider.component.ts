@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   OnDestroy,
   ChangeDetectionStrategy,
+  OnChanges,
 } from '@angular/core';
 import { Observable, Subscription, interval, Subject, fromEvent } from 'rxjs';
 import { debounceTime, throttleTime } from 'rxjs/operators';
@@ -28,7 +29,7 @@ import {
   styleUrls: ['./slider.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SliderComponent implements OnInit, OnDestroy {
+export class SliderComponent implements OnInit, OnDestroy, OnChanges {
   @Input() slides: Array<Slide>;
   @Input() foregrounds: Array<Foreground>;
 
@@ -103,6 +104,10 @@ export class SliderComponent implements OnInit, OnDestroy {
       }
       this.updateWidth(deltaScale);
     });
+  }
+
+  ngOnChanges() {
+    this.calculateForegroundsPositionsInPixels();
   }
 
   ngOnDestroy() {
