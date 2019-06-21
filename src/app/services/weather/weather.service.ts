@@ -4,10 +4,10 @@ import { Observable, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WeatherService {
-  private updateTime = 30000;
+  private updateTime = 60000;
 
   constructor(private http: HttpClient) {}
 
@@ -76,18 +76,18 @@ export class WeatherService {
           nearest: {
             type: nearestForecastTime.type,
             value: nearestForecastValue,
-            icon: nearestForecastIcon
+            icon: nearestForecastIcon,
           },
           tomorrow: {
             morning: {
               value: tomorrowMorningForecastValue,
-              icon: tomorrowMorningForecastIcon
+              icon: tomorrowMorningForecastIcon,
             },
             evening: {
               value: tomorrowEveningForecastValue,
-              icon: tomorrowEveningForecastIcon
-            }
-          }
+              icon: tomorrowEveningForecastIcon,
+            },
+          },
         };
         console.log(result);
 

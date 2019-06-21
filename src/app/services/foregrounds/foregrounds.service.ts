@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { Foreground } from 'src/app/interfaces/foreground';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ForegroundsService {
   constructor(

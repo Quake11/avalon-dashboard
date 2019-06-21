@@ -1,4 +1,4 @@
-<div class="slides" *ngIf="slides?.length > 0" (wheel)="onScroll($event)">
+<div class="slides" *ngIf="slides?.length > 0">
   <div *ngFor="let slide of slidesSorted; let i = index; trackBy: trackByFn" [ngClass]="{
       hidden: currentSlide !== i,
       fullscreen: slide.fullscreen,
@@ -29,15 +29,11 @@
     </div>
   </div>
 
-
-
   <div *ngFor="let foreground of foregroundsSorted; let i = index; trackBy: trackByFn" class="foreground"
-    [style.zoom]="foreground.scale" [ngStyle]="{'left.px': foreground.y || 0, 'top.px': foreground.x || 0}"
-    [style.transform]="'translate(' + foreground.x + 'px, ' + foreground.y + ', 0px)'" cdkDrag
-    (cdkDragStarted)="dragStarted(foreground.id)" (cdkDragReleased)="dragEnded($event)"
-    (cdkDragMoved)="dragMoved($event, foreground.id)">
-    <img [src]="foreground.downloadURL" />
+    [ngClass]="{'admin': isAdmin$ | async}" [style.width.px]="foreground.width" cdkDrag #dragRef="cdkDrag"
+    [cdkDragDisabled]="!(isAdmin$ | async)" [cdkDragFreeDragPosition]="foreground.positionPixels"
+    (cdkDragEnded)="dragEnded(foreground.id, dragRef)" (mousedown)="onSelectForeground(foreground.id)"
+    (mouseup)="onUnSelectForeground()">
+    <img [src]="foreground.downloadURL" class="foreground-image" />
   </div>
-
-
 </div>

@@ -4,10 +4,10 @@ import { switchMap, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CurrencyService {
-  private updateTime = 3600000;
+  private updateTime = 10 * 600000;
 
   constructor(private http: HttpClient) {}
 
@@ -31,12 +31,12 @@ export class CurrencyService {
         const result = {
           usd: {
             value: valueUSD,
-            up: valueUSD > prevValueUSD
+            up: valueUSD > prevValueUSD,
           },
           euro: {
             value: valueEUR,
-            up: valueEUR > prevValueEUR
-          }
+            up: valueEUR > prevValueEUR,
+          },
         };
 
         console.log(data);

@@ -1,5 +1,4 @@
 import { SlidesService, ForegroundsService } from 'src/app/services';
-import { SliderModule } from 'src/app/home/slider/slider.module';
 import { VisibilityButtonComponent } from './../shared/visibility-button/visibility-button.component';
 import { UploadTaskComponent } from './uploader/upload-task/upload-task.component';
 import { UploaderComponent } from './uploader/uploader.component';
@@ -27,7 +26,6 @@ import { HoldableDeleteComponent } from '../shared/holdable-delete/holdable-dele
 import { DirectivesModule } from '../directives/directives.module';
 import { ForegroundListComponent } from './foreground-list/foreground-list.component';
 import { ForegroundItemComponent } from './foreground-list/foreground-item/foreground-item.component';
-import { SliderComponent } from '../home/slider/slider.component';
 import { SafePipeModule } from '../pipes/safe.pipe.module';
 
 const routes: Routes = [
@@ -35,14 +33,7 @@ const routes: Routes = [
     path: '',
     component: AdminComponent,
     canActivate: [LoggedInGuard, AdminGuard],
-    children: [
-      {
-        path: 'debug',
-        component: SliderComponent,
-        canActivate: [LoggedInGuard, AdminGuard]
-      }
-    ]
-  }
+  },
 ];
 
 @NgModule({
@@ -58,7 +49,7 @@ const routes: Routes = [
     HoldableDeleteComponent,
     VisibilityButtonComponent,
     ForegroundListComponent,
-    ForegroundItemComponent
+    ForegroundItemComponent,
   ],
   imports: [
     CommonModule,
@@ -75,9 +66,8 @@ const routes: Routes = [
     MatButtonModule,
     MatSnackBarModule,
     DirectivesModule,
-    SliderModule,
-    SafePipeModule
+    SafePipeModule,
   ],
-  providers: [AdminGuard, ForegroundsService, SlidesService]
+  providers: [AdminGuard, ForegroundsService, SlidesService],
 })
 export class AdminModule {}

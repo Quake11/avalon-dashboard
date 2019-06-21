@@ -1,6 +1,6 @@
 :host {
   position: relative;
-  font-family: Candara, 'Times New Roman', serif;
+  font-family: Candara, "Times New Roman", serif;
 }
 
 .slides {
@@ -11,7 +11,7 @@
   .slide {
     position: absolute;
     opacity: 1;
-    transition: opacity 200ms linear;
+    transition: opacity 500ms linear;
     width: 56.25vw;
     max-height: 100vh;
     overflow: hidden;
@@ -74,9 +74,14 @@
   position: absolute;
   z-index: 999;
 
-  :active {
+  &.admin:active {
     background: rgba(8, 177, 107, 0.425);
     border: 5px solid rgba(0, 0, 0, 0.178);
     margin: -5px;
+  }
+
+  .foreground-image {
+    width: 100%;
+    height: auto;
   }
 }
