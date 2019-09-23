@@ -1,39 +1,94 @@
 <div class="slides" *ngIf="slides?.length > 0">
-  <div *ngFor="let slide of slidesSorted; let i = index; trackBy: trackByFn" [ngClass]="{
+  <div
+    *ngFor="let slide of slidesSorted; let i = index; trackBy: trackBySlideId"
+    [ngClass]="{
       hidden: currentSlide !== i,
       fullscreen: slide.fullscreen,
       hidetime: slide.hidetime
-    }" class="slide">
+    }"
+    class="slide"
+  >
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
-        <img [src]="(currentSlide === i || currentSlide + 1 === i) ? slide.downloadURL : ''" [alt]="slide.name" />
+        <img
+          [src]="
+            currentSlide === i || currentSlide + 1 === i
+              ? slide.downloadURL
+              : ''
+          "
+          [alt]="slide.name"
+        />
       </ng-template>
       <ng-template [ngSwitchCase]="'video'">
-        <video [src]="(currentSlide === i || currentSlide + 1 === i) ? slide.downloadURL : ''" loop autoplay
-          [muted]="true"></video>
+        <video
+          [src]="
+            currentSlide === i || currentSlide + 1 === i
+              ? slide.downloadURL
+              : ''
+          "
+          loop
+          autoplay
+          [muted]="true"
+        ></video>
       </ng-template>
     </ng-container>
   </div>
 
-  <div class="datetime" *ngIf="dateRU && dateENG && time">
-    <div class="time">
-      {{ time }}
-    </div>
-    <div class="dates">
-      <div class="date">
-        {{ dateRU }}
-      </div>
-      <div class="date">
-        {{ dateENG }}
-      </div>
-    </div>
-  </div>
+  <ng-container *ngIf="flights$ | async as flights">
+    <div class="flights-info">
+      <h2>Вылеты / Departures</h2>
 
-  <div *ngFor="let foreground of foregroundsSorted; let i = index; trackBy: trackByFn" class="foreground"
-    [ngClass]="{'admin': isAdmin$ | async}" [style.width.px]="foreground.width" cdkDrag #dragRef="cdkDrag"
-    [cdkDragDisabled]="!(isAdmin$ | async)" [cdkDragFreeDragPosition]="foreground.positionPixels"
-    (cdkDragEnded)="dragEnded(foreground.id, dragRef)" (mousedown)="onSelectForeground(foreground.id)"
-    (mouseup)="onUnSelectForeground()">
+      <div class="info-wrapper">
+        <div class="info">
+          <h3>Время вылета</h3>
+          <h3>Departure time</h3>
+        </div>
+        <div class="info">
+          <h3>Номер рейса</h3>
+          <h3>Flight number</h3>
+        </div>
+        <div class="info">
+          <h3>Пункт прибытия</h3>
+          <h3>Arrival Point</h3>
+        </div>
+      </div>
+
+      <div class="flights">
+        <div
+          class="flight"
+          *ngFor="let flight of flights; trackBy: trackByFlightThreadUid"
+        >
+          <div class="departure info">
+            <span>{{ flight.departure | date: 'medium' }}</span>
+          </div>
+          <div class="number  info">
+            <span>{{ flight.thread.number }}</span>
+          </div>
+          <div class="title  info">
+            <span>{{ flight.thread.title }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <div
+    *ngFor="
+      let foreground of foregroundsSorted;
+      let i = index;
+      trackBy: trackBySlideId
+    "
+    class="foreground"
+    [ngClass]="{ admin: isAdmin$ | async }"
+    [style.width.px]="foreground.width"
+    cdkDrag
+    #dragRef="cdkDrag"
+    [cdkDragDisabled]="!(isAdmin$ | async)"
+    [cdkDragFreeDragPosition]="foreground.positionPixels"
+    (cdkDragEnded)="dragEnded(foreground.id, dragRef)"
+    (mousedown)="onSelectForeground(foreground.id)"
+    (mouseup)="onUnSelectForeground()"
+  >
     <img [src]="foreground.downloadURL" class="foreground-image" />
   </div>
 </div>

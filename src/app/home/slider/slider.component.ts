@@ -1,33 +1,38 @@
-import {
-  Component,
-  OnInit,
-  Input,
-  ChangeDetectorRef,
-  OnDestroy,
-  ChangeDetectionStrategy,
-  OnChanges,
-} from '@angular/core';
-import { Observable, Subscription, interval, Subject, fromEvent } from 'rxjs';
-import { debounceTime, throttleTime } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { DragRef } from '@angular/cdk/drag-drop';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { fromEvent, interval, Observable, Subject, Subscription } from 'rxjs';
+import { debounceTime, map, takeUntil, throttleTime } from 'rxjs/operators';
+import { Foreground, Slide } from 'src/app/interfaces/';
 import {
   ForegroundsService,
   SlidesService,
-  UserService,
+  UserService
 } from 'src/app/services';
-import { Slide, Foreground } from 'src/app/interfaces/';
 import {
+  Flight,
+  FlightsService
+} from 'src/app/services/flights/flights.service';
+import {
+  FormattedDate,
   getFormattedDates,
-  getPixelsFromPercentage,
   getPercentageFromPixels,
+  getPixelsFromPercentage
 } from 'src/app/utils';
 
 @Component({
   selector: 'app-slider',
   templateUrl: './slider.component.html',
   styleUrls: ['./slider.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SliderComponent implements OnInit, OnDestroy, OnChanges {
   @Input() slides: Array<Slide>;
@@ -47,25 +52,25 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
 
   currentDraggedForeground: Foreground;
 
-  private scrolledSubject: Subject<WheelEvent> = new Subject<WheelEvent>();
   autoPlaySub: Subscription;
 
   slidesInterval$: Observable<number>;
   currentSlide = 0;
 
-  datetimeSub: Subscription;
-
-  time: string;
-  dateENG: string;
-  dateRU: string;
+  datetimeData$: Observable<FormattedDate>;
+  flights$: Observable<Flight[]>;
 
   isAdmin$: Observable<boolean>;
+
+  private scrolledSubject: Subject<WheelEvent> = new Subject<WheelEvent>();
+  private destroyed$: Subject<void> = new Subject();
   constructor(
     private ref: ChangeDetectorRef,
     private slidesService: SlidesService,
     private foregroundsService: ForegroundsService,
     private snackBar: MatSnackBar,
-    private userService: UserService
+    private userService: UserService,
+    private flights: FlightsService
   ) {}
 
   ngOnInit() {
@@ -88,9 +93,11 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
       this.autoPlay(i);
     });
 
-    this.datetimeSub = interval(1000).subscribe(() => {
-      this.setDate();
-    });
+    this.datetimeData$ = interval(1000).pipe(
+      map(() => {
+        return getFormattedDates();
+      })
+    );
 
     this.scrolledSubject.pipe(debounceTime(200)).subscribe(scrollEvent => {
       const { deltaY, shiftKey } = scrollEvent;
@@ -104,6 +111,7 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
       }
       this.updateWidth(deltaScale);
     });
+    this.flights$ = this.flights.flightsRealtime$;
   }
 
   ngOnChanges() {
@@ -111,10 +119,8 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy() {
-    try {
-      this.autoPlaySub.unsubscribe();
-      this.datetimeSub.unsubscribe();
-    } catch (error) {}
+    this.destroyed$.next();
+    this.destroyed$.complete();
   }
 
   calculateForegroundsPositionsInPixels() {
@@ -123,21 +129,15 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  setDate() {
-    const { time, dateENG, dateRU } = getFormattedDates();
-    this.time = time;
-    this.dateENG = dateENG;
-    this.dateRU = dateRU;
-    this.ref.markForCheck();
-  }
-
   autoPlay(i) {
     if (this.autoPlaySub) {
       this.autoPlaySub.unsubscribe();
     }
-    this.autoPlaySub = interval(i).subscribe(() => {
-      this.nextSlide();
-    });
+    this.autoPlaySub = interval(i)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe(() => {
+        this.nextSlide();
+      });
   }
 
   nextSlide() {
@@ -168,7 +168,7 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
   updatePosition(id: string, positionPercents: { x: number; y: number }) {
     this.foregroundsService.update(id, { positionPercents }).then(() =>
       this.snackBar.open('Позиция сохранена', '', {
-        duration: 500,
+        duration: 500
       })
     );
   }
@@ -190,23 +190,27 @@ export class SliderComponent implements OnInit, OnDestroy, OnChanges {
         `Слишком мелко. Миниммаяльная ширина - ${minimumWidth}px`,
         '',
         {
-          duration: 2000,
+          duration: 2000
         }
       );
       return;
     }
     this.foregroundsService
       .update(id, {
-        width: newWidth,
+        width: newWidth
       })
       .then(() =>
         this.snackBar.open('Масштаб сохранён', '', {
-          duration: 1500,
+          duration: 1500
         })
       );
   }
 
-  trackByFn(index, slide) {
+  trackBySlideId(index, slide) {
     return slide.id;
+  }
+
+  trackByFlightThreadUid(index, flight: Flight) {
+    return flight.thread.uid;
   }
 }

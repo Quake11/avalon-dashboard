@@ -1,5 +1,5 @@
 *:not(mat-icon) {
-  font-family: Candara, 'Times New Roman', serif;
+  font-family: Roboto, sans-serif;
 }
 
 .info {
@@ -8,58 +8,45 @@
   flex: 1;
   justify-content: center;
   align-items: center;
-  padding: 0 15px;
   color: white;
   max-height: 100vh;
   height: 100%;
 
   .info-block {
     text-align: center;
-    background: #434242;
-    border-radius: 10px;
-    box-shadow: 4px 4px 4px black;
-    margin: 15px;
+    background: red;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    color: #f7f8ca;
+    width: 100%;
+    flex: 1;
 
-    &.currency {
-      font-size: 5vh;
-      font-weight: bold;
-      flex: 1;
-      align-items: center;
+    &.datetime {
+      background: #792d2d;
+      flex-direction: column;
+      padding-top: 25px;
 
-      .value {
-        margin: 25px;
-        padding: 15px;
+      .time {
+        font-size: 10vh;
+        font-weight: bold;
+        letter-spacing: 6px;
+      }
+
+      .dates {
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        margin-bottom: 50px;
 
-        mat-icon {
-          height: 6vh;
-          width: 6vh;
-          font-size: 6vh;
-          line-height: 7vh;
-
-          &.up {
-            color: rgb(28, 206, 58);
-          }
-
-          &.down {
-            color: rgb(252, 47, 11);
-          }
+        .date {
+          margin: 10px;
+          font-size: 3vh;
         }
       }
     }
 
-    h2 {
-      flex-basis: 100%;
-      margin-bottom: 0;
-      margin-top: 10px;
-      font-size: 5vh;
-    }
-
     &.weather {
+      background: #813737;
       .weather-day {
         display: flex;
         flex-wrap: wrap;
@@ -69,8 +56,8 @@
         h2 {
           flex-basis: 100%;
           margin-bottom: 0;
-          margin-top: 10px;
-          font-size: 5vh;
+          margin: 10px 0;
+          font-size: 3.5vh;
         }
 
         .morning,
@@ -85,20 +72,68 @@
 
           h4 {
             margin: 1vh;
+            font-weight: 400;
           }
 
-          .value {
-            font-size: 6vh;
-            font-weight: bold;
+          .value-wrapper {
             display: flex;
-            .celsium {
-              font-size: 3vh;
+            align-items: center;
+            .value {
+              font-size: 5vh;
+              display: flex;
+              .celsium {
+                font-size: 3vh;
+              }
             }
           }
 
           .icon {
-            height: 15vh;
+            height: 10vh;
             width: auto;
+          }
+        }
+      }
+    }
+
+    &.currency {
+      background: #8a3f3f;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+
+      h2 {
+        font-size: 3.5vh;
+        margin: 0;
+      }
+
+      .values {
+        margin-top: 10px;
+        display: flex;
+        .value {
+          margin: 0 25px;
+          padding: 15px;
+          display: flex;
+          align-items: center;
+          font-size: 3.5vh;
+
+          .currency {
+            font-weight: bold;
+            margin-right: 10px;
+          }
+
+          mat-icon {
+            height: 6vh;
+            width: 6vh;
+            font-size: 6vh;
+            line-height: 7vh;
+
+            &.up {
+              color: rgb(28, 206, 58);
+            }
+
+            &.down {
+              color: rgb(252, 47, 11);
+            }
           }
         }
       }

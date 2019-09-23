@@ -1,12 +1,33 @@
 <div class="info">
+  <div
+    *ngIf="datetimeData$ | async as datetimeData"
+    class="datetime info-block"
+  >
+    <div class="time">
+      {{ datetimeData.time }}
+    </div>
+    <div class="dates">
+      <div class="date">
+        {{ datetimeData.dateRU }}
+      </div>
+      <div class="date">
+        {{ datetimeData.dateENG }}
+      </div>
+    </div>
+  </div>
+
   <div class="weather info-block">
     <ng-container *ngIf="forecast$ | async as forecast">
       <div class="weather-day" *ngIf="currentTemp$ | async as temp">
         <h2>Сегодня / Today</h2>
         <div class="now">
           <h4>Сейчас / Now</h4>
-          <span class="value">{{ temp.value }} <span class="celsium">°C</span></span>
-          <img [src]="temp.icon" class="icon" />
+          <div class="value-wrapper">
+            <img [src]="temp.icon" class="icon" />
+            <span class="value"
+              >{{ temp.value }} <span class="celsium">°C</span></span
+            >
+          </div>
         </div>
 
         <div class="forecast">
@@ -16,8 +37,14 @@
           <h4 *ngIf="forecast.nearest.type === 'evening'">
             Вечером / Evening
           </h4>
-          <span class="value">{{ forecast.nearest.value }} <span class="celsium">°C</span></span>
-          <img [src]="forecast.nearest.icon" class="icon" />
+
+          <div class="value-wrapper">
+            <img [src]="forecast.nearest.icon" class="icon" />
+            <span class="value"
+              >{{ forecast.nearest.value }}
+              <span class="celsium">°C</span></span
+            >
+          </div>
         </div>
       </div>
 
@@ -25,16 +52,25 @@
         <h2>Завтра / Tomorrow</h2>
         <div class="morning">
           <h4>Утром / Morning</h4>
-          <span class="value">{{ forecast.tomorrow.morning.value }}
-            <span class="celsium">°C</span></span>
-          <img [src]="forecast.tomorrow.morning.icon" class="icon" />
+          <div class="value-wrapper">
+            <img [src]="forecast.tomorrow.morning.icon" class="icon" />
+            <span class="value"
+              >{{ forecast.tomorrow.morning.value }}
+              <span class="celsium">°C</span></span
+            >
+          </div>
         </div>
 
         <div class="evening">
           <h4>Вечером / Evening</h4>
-          <span class="value">{{ forecast.tomorrow.evening.value }}
-            <span class="celsium">°C</span></span>
-          <img [src]="forecast.tomorrow.evening.icon" class="icon" />
+
+          <div class="value-wrapper">
+            <img [src]="forecast.tomorrow.evening.icon" class="icon" />
+            <span class="value">
+              {{ forecast.tomorrow.evening.value }}
+              <span class="celsium">°C</span>
+            </span>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -42,21 +78,28 @@
 
   <div class="currency info-block" *ngIf="currency$ | async as currency">
     <h2>Центр. банк / Central bank</h2>
-    <div class="value">
-      $ {{ currency.usd.value }}
-      <ng-container *ngIf="currency.usd.up; then up; else down"></ng-container>
-    </div>
-    <div class="value">
-      € {{ currency.euro.value }}
-      <ng-container *ngIf="currency.euro.up; then up; else down"></ng-container>
-    </div>
 
-    <ng-template #up>
-      <mat-icon class="up">arrow_drop_up</mat-icon>
-    </ng-template>
+    <div class="values">
+      <div class="value">
+        <span class="currency">$</span> {{ currency.usd.value }}
+        <ng-container
+          *ngIf="currency.usd.up; then up; else down"
+        ></ng-container>
+      </div>
+      <div class="value">
+        <span class="currency">€</span> {{ currency.euro.value }}
+        <ng-container
+          *ngIf="currency.euro.up; then up; else down"
+        ></ng-container>
+      </div>
 
-    <ng-template #down>
-      <mat-icon class="down">arrow_drop_down</mat-icon>
-    </ng-template>
+      <ng-template #up>
+        <mat-icon class="up">arrow_drop_up</mat-icon>
+      </ng-template>
+
+      <ng-template #down>
+        <mat-icon class="down">arrow_drop_down</mat-icon>
+      </ng-template>
+    </div>
   </div>
 </div>

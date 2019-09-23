@@ -41,11 +41,13 @@ const months = {
   ]
 };
 
-export function getFormattedDates(): {
+export interface FormattedDate {
   time: string;
   dateRU: string;
   dateENG: string;
-} {
+}
+
+export function getFormattedDates(): FormattedDate {
   const dateRef = new Date();
 
   const dayOfWeekRU = daysOfWeek.ru[dateRef.getDay()];

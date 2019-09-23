@@ -1,6 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { Observable } from 'rxjs';
-import { WeatherService, CurrencyService } from '../../services';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { interval, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { FormattedDate, getFormattedDates } from 'src/app/utils';
+import { CurrencyService, WeatherService } from '../../services';
 
 @Component({
   selector: 'app-info',
@@ -9,10 +11,11 @@ import { WeatherService, CurrencyService } from '../../services';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InfoComponent implements OnInit {
-  currentTemp$: Observable<{}>;
-  forecast$: Observable<{}>;
+  currentTemp$: Observable<any>;
+  forecast$: Observable<any>;
+  currency$: Observable<any>;
 
-  currency$: Observable<{}>;
+  datetimeData$: Observable<FormattedDate>;
 
   constructor(
     private weather: WeatherService,
@@ -22,6 +25,12 @@ export class InfoComponent implements OnInit {
   ngOnInit() {
     this.currency$ = this.currency.currencyRealtime$;
     this.setWeather();
+
+    this.datetimeData$ = interval(1000).pipe(
+      map(() => {
+        return getFormattedDates();
+      })
+    );
   }
 
   setWeather() {
