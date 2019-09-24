@@ -36,10 +36,10 @@
 
   <ng-container *ngIf="flights$ | async as flights">
     <div class="flights-info">
-      <h2>Вылеты / Departures</h2>
+      <h2>Вылеты из Сыктывкара / Departures from Syktyvkar</h2>
 
       <div class="info-wrapper">
-        <div class="info">
+        <div class="info departure">
           <h3>Время вылета</h3>
           <h3>Departure time</h3>
         </div>
@@ -59,7 +59,7 @@
           *ngFor="let flight of flights; trackBy: trackByFlightThreadUid"
         >
           <div class="departure info">
-            <span>{{ flight.departure | date: 'medium' }}</span>
+            <span>{{ flight.departure }}</span>
           </div>
           <div class="number  info">
             <span>{{ flight.thread.number }}</span>
