@@ -8,11 +8,25 @@
 </div>
 
 <div class="uploaders">
-  <app-uploader [maxSizeKb]="10000" [title]="'Загрузить слайд'" storageFolder="testSlides"
-    fileTypes="['image', 'video']" (done)="onUploadSlideDone($event)" multiple="true" (error)="onUploadError($event)">
+  <app-uploader
+    [maxSizeKb]="120000"
+    [title]="'Загрузить слайд'"
+    storageFolder="testSlides"
+    fileTypes="['image', 'video']"
+    (done)="onUploadSlideDone($event)"
+    multiple="true"
+    (error)="onUploadError($event)"
+  >
   </app-uploader>
-  <app-uploader [maxSizeKb]="4000" [title]="'Загрузить анимацию'" storageFolder="foregrounds" fileTypes="['image']"
-    (done)="onUploadForegroundDone($event)" multiple="true" (error)="onUploadError($event)"></app-uploader>
+  <app-uploader
+    [maxSizeKb]="4000"
+    [title]="'Загрузить анимацию'"
+    storageFolder="foregrounds"
+    fileTypes="['image']"
+    (done)="onUploadForegroundDone($event)"
+    multiple="true"
+    (error)="onUploadError($event)"
+  ></app-uploader>
 </div>
 
 <div class="settings">
