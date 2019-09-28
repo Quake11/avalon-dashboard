@@ -1,32 +1,54 @@
 <ng-content></ng-content>
-<span class="name" [matTooltip]="slide.name" matTooltipPosition="above" [style.opacity]="slide.visible ? 1 : 0.3">
+<span
+  class="name"
+  [matTooltip]="slide.name"
+  matTooltipPosition="above"
+  [style.opacity]="slide.visible ? 1 : 0.3"
+>
   {{ slide.name }}
 </span>
 
 <mat-chip-list>
-  <mat-chip color="primary" selected *ngIf="slide.fullscreen" (removed)="fullscreenChange(false)">
+  <mat-chip
+    color="primary"
+    selected
+    *ngIf="slide.fullscreen"
+    (removed)="fullscreenChange(false)"
+  >
     fullscreen
     <mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 
-<app-visibility-button [visible]="slide.visible" (changed)="visibilityChange($event)">
+<app-visibility-button
+  [visible]="slide.visible"
+  (changed)="visibilityChange($event)"
+>
 </app-visibility-button>
 
-<app-holdable-delete (deleted)="delete($event)"></app-holdable-delete>
+<app-holdable-delete (deleted)="onDelete()"></app-holdable-delete>
 
 <button mat-icon-button [matMenuTriggerFor]="menu">
   <mat-icon>more_vert</mat-icon>
 </button>
 
 <mat-menu #menu="matMenu" style="display: none;">
-  <mat-checkbox class="mat-menu-item" color="primary" [checked]="slide.fullscreen"
-    (change)="fullscreenChange($event.checked)">
+  <mat-checkbox
+    class="mat-menu-item"
+    color="primary"
+    [checked]="slide.fullscreen"
+    (change)="fullscreenChange($event.checked)"
+  >
     На полный экран
   </mat-checkbox>
 
-  <mat-checkbox *ngIf="slide.fullscreen" class="mat-menu-item" color="primary" [checked]="slide.hidetime"
-    (change)="hidetimeChange($event.checked)">
+  <mat-checkbox
+    *ngIf="slide.fullscreen"
+    class="mat-menu-item"
+    color="primary"
+    [checked]="slide.hidetime"
+    (change)="hidetimeChange($event.checked)"
+  >
     Скрывать время
   </mat-checkbox>
 </mat-menu>

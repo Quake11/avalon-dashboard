@@ -3,6 +3,8 @@ export interface Slide {
   name?: string;
   path?: string;
   downloadURL?: string;
+  youtubeUrl?: string;
+  youtubeId?: string;
   sort?: number;
   type?: string;
   fullscreen?: boolean;

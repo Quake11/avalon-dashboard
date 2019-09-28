@@ -1,20 +1,32 @@
 <ng-content></ng-content>
-<span class="name" [matTooltip]="foreground.name" matTooltipPosition="above"
-  [style.opacity]="foreground.visible ? 1 : 0.3">
+<span
+  class="name"
+  [matTooltip]="foreground.name"
+  matTooltipPosition="above"
+  [style.opacity]="foreground.visible ? 1 : 0.3"
+>
   {{ foreground.name }}
 </span>
 
 <mat-chip-list>
-  <mat-chip color="primary" selected *ngIf="foreground.fullscreen" (removed)="fullscreenChange(false)">
+  <mat-chip
+    color="primary"
+    selected
+    *ngIf="foreground.fullscreen"
+    (removed)="fullscreenChange(false)"
+  >
     fullscreen
     <mat-icon matChipRemove>cancel</mat-icon>
   </mat-chip>
 </mat-chip-list>
 
-<app-visibility-button [visible]="foreground.visible" (changed)="visibilityChange($event)">
+<app-visibility-button
+  [visible]="foreground.visible"
+  (changed)="visibilityChange($event)"
+>
 </app-visibility-button>
 
-<app-holdable-delete (deleted)="delete($event)"></app-holdable-delete>
+<app-holdable-delete (deleted)="onDelete()"></app-holdable-delete>
 
 <button mat-icon-button [matMenuTriggerFor]="menu">
   <mat-icon>more_vert</mat-icon>

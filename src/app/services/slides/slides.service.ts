@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-
-import { map, filter } from 'rxjs/operators';
-import { Slide } from 'src/app/interfaces/slide';
+import { filter, map } from 'rxjs/operators';
 import { Settings } from 'src/app/interfaces';
+import { Slide } from 'src/app/interfaces/slide';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +26,7 @@ export class SlidesService {
       map(settings => settings.slidesInterval)
     );
 
-  add(slide: {}): Promise<any> {
+  add(slide: Slide): Promise<any> {
     return this.afs
       .collection(this.collection)
       .add({ ...slide, visible: true });
@@ -71,16 +70,20 @@ export class SlidesService {
       .update(data);
   }
 
-  delete(id: string, pathStorage: string): Promise<any> {
+  delete(id: string, pathStorage?: string): Promise<any> {
     const deleteFromDb = this.afs
       .collection<Slide>(this.collection)
       .doc(id)
       .delete();
-    const deleteFromStorage = this.storage
-      .ref(pathStorage)
-      .delete()
-      .toPromise();
 
-    return Promise.all([deleteFromStorage, deleteFromDb]);
+    if (pathStorage) {
+      const deleteFromStorage = this.storage
+        .ref(pathStorage)
+        .delete()
+        .toPromise();
+      return Promise.all([deleteFromStorage, deleteFromDb]);
+    }
+
+    return deleteFromDb;
   }
 }

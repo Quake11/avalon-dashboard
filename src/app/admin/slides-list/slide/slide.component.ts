@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Slide } from 'src/app/interfaces/slide';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Slide } from 'src/app/interfaces/slide';
 import { SlidesService } from 'src/app/services/slides/slides.service';
 
 @Component({
@@ -15,10 +15,8 @@ export class SlideComponent implements OnInit {
 
   ngOnInit() {}
 
-  delete(isDeleted) {
-    if (isDeleted) {
-      this.slides.delete(this.slide.id, this.slide.path);
-    }
+  onDelete() {
+    this.slides.delete(this.slide.id);
   }
 
   fullscreenChange(checked: boolean) {

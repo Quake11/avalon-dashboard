@@ -1,10 +1,10 @@
 import {
   Component,
-  OnInit,
-  Output,
+  ElementRef,
   EventEmitter,
   Input,
-  ElementRef
+  OnInit,
+  Output
 } from '@angular/core';
 
 @Component({
@@ -13,7 +13,7 @@ import {
   styleUrls: ['./holdable-delete.component.scss']
 })
 export class HoldableDeleteComponent implements OnInit {
-  @Output() deleted: EventEmitter<boolean> = new EventEmitter();
+  @Output() deleted: EventEmitter<void> = new EventEmitter();
   @Input() title: string;
 
   progress: number;
@@ -29,7 +29,7 @@ export class HoldableDeleteComponent implements OnInit {
   delete(progress) {
     this.progress = progress;
     if (this.progress === 100) {
-      this.deleted.emit(true);
+      this.deleted.emit();
     }
   }
 }

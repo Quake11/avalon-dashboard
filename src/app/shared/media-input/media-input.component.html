@@ -1,0 +1,8 @@
+<mat-form-field class="example-full-width">
+  <input
+    matInput
+    placeholder="Ссылка на файл видео/изображения или youtube"
+    (keyup.enter)="onUrlAdd()"
+    [(ngModel)]="value"
+  />
+</mat-form-field>

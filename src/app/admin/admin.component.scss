@@ -30,7 +30,13 @@
   justify-content: center;
   flex-wrap: wrap;
 
-  app-uploader {
+  > * {
     margin: 15px;
+  }
+
+  .slides {
+    > * {
+      margin-bottom: 10px;
+    }
   }
 }

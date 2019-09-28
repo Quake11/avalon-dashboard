@@ -1,8 +1,9 @@
-import { SlidesService, ForegroundsService } from 'src/app/services';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
+import { ForegroundsService, SlidesService } from 'src/app/services';
+import { getMediaUrlType, getYoutubeVideoId } from 'src/app/utils';
 
 @Component({
   selector: 'app-admin',
@@ -66,5 +67,33 @@ export class AdminComponent implements OnInit {
     this.snackBar.open(err, '', {
       duration: 5000
     });
+  }
+
+  onMediaAdd(youtubeUrl: string) {
+    const type = getMediaUrlType(youtubeUrl);
+    console.log(type);
+
+    const youtubeId = getYoutubeVideoId(youtubeUrl);
+    console.log(youtubeId);
+
+    if (type !== null) {
+      this.slides
+        .add({
+          youtubeUrl,
+          youtubeId,
+          name: youtubeUrl,
+          type,
+          sort: 0
+        })
+        .then(() => {
+          this.snackBar.open('Медиа успешно добавлено', '', {
+            duration: 3000
+          });
+        });
+    } else {
+      this.snackBar.open('Неизвестный тип медиа!', '', {
+        duration: 5000
+      });
+    }
   }
 }
