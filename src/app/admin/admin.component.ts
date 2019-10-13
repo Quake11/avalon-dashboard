@@ -86,7 +86,7 @@ export class AdminComponent implements OnInit {
           sort: 0
         })
         .then(() => {
-          this.snackBar.open('Медиа успешно добавлено', '', {
+          this.snackBar.open(`Медиа (${type}) успешно добавлено`, '', {
             duration: 3000
           });
         });
