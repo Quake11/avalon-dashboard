@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { Settings } from 'src/app/interfaces';
-import { Slide } from 'src/app/interfaces/slide';
+import { Injectable } from "@angular/core";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { AngularFireStorage } from "@angular/fire/storage";
+import { Observable } from "rxjs";
+import { filter, map } from "rxjs/operators";
+import { Settings } from "src/app/interfaces";
+import { Slide } from "src/app/interfaces/slide";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class SlidesService {
   constructor(
@@ -15,11 +15,11 @@ export class SlidesService {
     private afs: AngularFirestore
   ) {}
 
-  collection = 'slides';
+  collection = "slides";
 
   slidesInterval$ = this.afs
-    .collection('meta')
-    .doc<Settings>('settings')
+    .collection("meta")
+    .doc<Settings>("settings")
     .valueChanges()
     .pipe(
       filter(settings => !!settings),

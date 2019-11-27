@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
-import { ForegroundsService, SlidesService } from 'src/app/services';
-import { getMediaUrlType, getYoutubeVideoId } from 'src/app/utils';
+import { Component, OnInit } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { MatSnackBar } from "@angular/material";
+import { Router } from "@angular/router";
+import { map, switchMap, take } from "rxjs/operators";
+import { ForegroundsService, SlidesService } from "src/app/services";
+import { getMediaUrlType, getYoutubeVideoId } from "src/app/utils";
 
 @Component({
-  selector: 'app-admin',
-  templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.scss']
+  selector: "app-admin",
+  templateUrl: "./admin.component.html",
+  styleUrls: ["./admin.component.scss"]
 })
 export class AdminComponent implements OnInit {
   get foregrounds$() {
@@ -30,7 +31,7 @@ export class AdminComponent implements OnInit {
   ngOnInit() {}
 
   signOut() {
-    this.auth.auth.signOut().then(() => this.router.navigate(['/login']));
+    this.auth.auth.signOut().then(() => this.router.navigate(["/login"]));
   }
 
   onUploadSlideDone(upload: {
@@ -41,13 +42,21 @@ export class AdminComponent implements OnInit {
   }) {
     const { url, path, name, type } = upload;
     console.log(upload);
-    this.slides.add({
-      downloadURL: url,
-      path,
-      name,
-      type,
-      sort: 0
-    });
+    this.slides
+      .getAll()
+      .pipe(
+        map(slides => slides.length),
+        take(1)
+      )
+      .subscribe(slidesLength => {
+        this.slides.add({
+          downloadURL: url,
+          path,
+          name,
+          type,
+          sort: slidesLength
+        });
+      });
   }
 
   onUploadForegroundDone(upload) {
@@ -64,7 +73,7 @@ export class AdminComponent implements OnInit {
   onUploadError(err) {
     console.log(err);
 
-    this.snackBar.open(err, '', {
+    this.snackBar.open(err, "", {
       duration: 5000
     });
   }
@@ -78,20 +87,27 @@ export class AdminComponent implements OnInit {
 
     if (type !== null) {
       this.slides
-        .add({
-          youtubeUrl,
-          youtubeId,
-          name: youtubeUrl,
-          type,
-          sort: 0
-        })
-        .then(() => {
-          this.snackBar.open(`Медиа (${type}) успешно добавлено`, '', {
+        .getAll()
+        .pipe(
+          map(slides => slides.length),
+          take(1),
+          switchMap(slidesLength =>
+            this.slides.add({
+              youtubeUrl,
+              youtubeId,
+              name: youtubeUrl,
+              type,
+              sort: slidesLength
+            })
+          )
+        )
+        .subscribe(() => {
+          this.snackBar.open(`Медиа (${type}) успешно добавлено`, "", {
             duration: 3000
           });
         });
     } else {
-      this.snackBar.open('Неизвестный тип медиа!', '', {
+      this.snackBar.open("Неизвестный тип медиа!", "", {
         duration: 5000
       });
     }

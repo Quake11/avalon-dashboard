@@ -1,12 +1,11 @@
-import { HomeComponent } from './home.component';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
-import { SliderModule } from './slider/slider.module';
-import { InfoModule } from './info/info.module';
+import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { RouterModule, Routes } from "@angular/router";
+import { HomeComponent } from "./home.component";
+import { SliderModule } from "./slider/slider.module";
 
-const routes: Routes = [{ path: '', component: HomeComponent }];
+const routes: Routes = [{ path: "", component: HomeComponent }];
 
 @NgModule({
   declarations: [HomeComponent],
@@ -14,8 +13,7 @@ const routes: Routes = [{ path: '', component: HomeComponent }];
     CommonModule,
     RouterModule.forChild(routes),
     AngularFirestoreModule,
-    SliderModule,
-    InfoModule
+    SliderModule
   ]
 })
 export class HomeModule {}

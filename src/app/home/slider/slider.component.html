@@ -4,20 +4,14 @@
     [ngClass]="{
       hidden: currentSlide !== i,
       fullscreen: slide.fullscreen,
-      hidetime: slide.hidetime
+      hidetime: slide.hidetime,
+      active: currentSlide === i
     }"
     class="slide"
   >
     <ng-container [ngSwitch]="slide.type">
       <ng-template [ngSwitchCase]="'image'">
-        <img
-          [src]="
-            currentSlide === i || currentSlide + 1 === i
-              ? slide.downloadURL
-              : ''
-          "
-          [alt]="slide.name"
-        />
+        <img [src]="slide.downloadURL" [alt]="slide.name" />
       </ng-template>
       <ng-template [ngSwitchCase]="'video'">
         <video
@@ -33,18 +27,17 @@
       </ng-template>
       <ng-template [ngSwitchCase]="'youtube'">
         <iframe
+          *ngIf="currentSlide === i"
           frameborder="0"
           allowfullscreen="1"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           [src]="
-            currentSlide === i || currentSlide + 1 === i
-              ? ('https://www.youtube.com/embed/' +
-                  slide.youtubeId +
-                  '?autoplay=1&amp;loop=1&amp;showinfo=0&amp;playlist=' +
-                  slide.youtubeId +
-                  '&amp;cc_load_policy=0&amp;controls=0&amp;disablekb=1&amp;enablejsapi=1&amp;fs=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;rel=0&amp;mute=1&amp;widgetid=1'
-                | safe: 'resourceUrl')
-              : ''
+            'https://www.youtube.com/embed/' +
+              slide.youtubeId +
+              '?autoplay=1&amp;loop=1&amp;showinfo=0&amp;playlist=' +
+              slide.youtubeId +
+              '&amp;cc_load_policy=0&amp;controls=0&amp;disablekb=1&amp;enablejsapi=1&amp;fs=0&amp;iv_load_policy=3&amp;modestbranding=1&amp;rel=0&amp;mute=1&amp;widgetid=1'
+              | safe: 'resourceUrl'
           "
         ></iframe>
       </ng-template>
@@ -52,7 +45,7 @@
   </div>
 
   <ng-container *ngIf="flights$ | async as flights">
-    <div class="flights-info">
+    <div class="flights-info" *ngIf="!slides[currentSlide].fullscreen">
       <h2>Вылеты из Сыктывкара / Departures from Syktyvkar</h2>
 
       <div class="info-wrapper">
@@ -109,3 +102,5 @@
     <img [src]="foreground.downloadURL" class="foreground-image" />
   </div>
 </div>
+
+<app-info *ngIf="!slides[currentSlide].fullscreen"></app-info>
