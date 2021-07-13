@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ForegroundItemComponent } from './foreground-item.component';
 
@@ -6,7 +6,7 @@ describe('ForegroundItemComponent', () => {
   let component: ForegroundItemComponent;
   let fixture: ComponentFixture<ForegroundItemComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ForegroundItemComponent ]
     })

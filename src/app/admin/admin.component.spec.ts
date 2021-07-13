@@ -16,7 +16,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { HoldableDeleteComponent } from './../shared/holdable-delete/holdable-delete.component';
 import { UploaderComponent } from './uploader/uploader.component';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AdminComponent } from './admin.component';
 import { SlidesListComponent } from './slides-list/slides-list.component';
@@ -38,7 +38,7 @@ describe('AdminComponent', () => {
     auth: of({ uid: 'ABC123' })
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         AdminComponent,

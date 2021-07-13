@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { VisibilityButtonComponent } from './visibility-button.component';
 
@@ -6,7 +6,7 @@ describe('VisibilityButtonComponent', () => {
   let component: VisibilityButtonComponent;
   let fixture: ComponentFixture<VisibilityButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ VisibilityButtonComponent ]
     })
