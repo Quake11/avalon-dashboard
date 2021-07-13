@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Observable } from 'rxjs';
-
 import { map } from 'rxjs/operators';
 import { Foreground } from 'src/app/interfaces/foreground';
+
 
 @Injectable({
   providedIn: 'root',
@@ -38,7 +38,7 @@ export class ForegroundsService {
         map(foregrounds => {
           return foregrounds.map(a => {
             const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
+            const id = a.payload.doc.data().id;
             return { id, ...data };
           });
           // .filter(slide => !slide.visible);

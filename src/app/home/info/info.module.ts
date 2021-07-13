@@ -1,7 +1,7 @@
-import { InfoComponent } from './info.component';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material';
+import { NgModule } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { InfoComponent } from './info.component';
 
 @NgModule({
   declarations: [InfoComponent],

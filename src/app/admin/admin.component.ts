@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { AngularFireAuth } from "@angular/fire/auth";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { map, switchMap, take } from "rxjs/operators";
 import { ForegroundsService, SlidesService } from "src/app/services";
@@ -31,7 +31,7 @@ export class AdminComponent implements OnInit {
   ngOnInit() {}
 
   signOut() {
-    this.auth.auth.signOut().then(() => this.router.navigate(["/login"]));
+    this.auth.signOut().then(() => this.router.navigate(["/login"]));
   }
 
   onUploadSlideDone(upload: {
