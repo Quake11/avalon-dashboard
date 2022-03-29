@@ -38,7 +38,7 @@ export class ForegroundsService {
         map(foregrounds => {
           return foregrounds.map(a => {
             const data = a.payload.doc.data();
-            const id = a.payload.doc.data().id;
+            const id = a.payload.doc.id;
             return { id, ...data };
           });
           // .filter(slide => !slide.visible);
